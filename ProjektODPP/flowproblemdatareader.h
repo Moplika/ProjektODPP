@@ -6,14 +6,8 @@
 #include <string>
 
 FlowProblem readFlowProblem(std::string filename);
+void readSolution(std::string filename, double &expectedCmax,
+                  std::vector<double> &expectedTimes);
 
-//class FlowProblemDataReader
-//{
-//public:
-//    FlowProblemDataReader();
-
-//private:
-
-//};
 
 #endif // FLOWPROBLEMDATAREADER_H

@@ -10,7 +10,7 @@ FlowProblem readFlowProblem(std::string filename) {
     inputStream.open(filename.c_str(), std::ifstream::in);
 
     if (!inputStream.is_open()) {
-        std::cout << "File not opened! " << std::endl;
+        std::cout << "File " << filename << " not opened! " << std::endl;
         return FlowProblem();
     }
 
@@ -23,11 +23,10 @@ FlowProblem readFlowProblem(std::string filename) {
 
     inputStream >> taskCount >> stationCount >> machineCount;
 
-    // Debug
-    std::cout << "Task count: " << taskCount << std::endl;
-    std::cout << "Station count: " << stationCount << std::endl;
-    std::cout << "Machine count: " << machineCount << std::endl;
-
+//    // Debug
+//    std::cout << "Task count: " << taskCount << std::endl;
+//    std::cout << "Station count: " << stationCount << std::endl;
+//    std::cout << "Machine count: " << machineCount << std::endl;
 
     times.push_back(0.0); //Czas dla zerowego zadania
     for (int i = 1; i < taskCount*stationCount+1; i++) {
@@ -36,13 +35,13 @@ FlowProblem readFlowProblem(std::string filename) {
         times.push_back(time);
     }
 
-    // Debug
-    std::cout << "Times: " << std::endl;
-    for (std::vector<double>::iterator it = times.begin();
-         it != times.end(); it++) {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
+//    // Debug
+//    std::cout << "Times: " << std::endl;
+//    for (std::vector<double>::iterator it = times.begin();
+//         it != times.end(); it++) {
+//        std::cout << *it << " ";
+//    }
+//    std::cout << std::endl;
 
     for (int i = 0; i < taskCount*stationCount + stationCount * machineCount + 1; i++) {
         unsigned int taskNumber;
@@ -50,13 +49,13 @@ FlowProblem readFlowProblem(std::string filename) {
         permutation.push_back(taskNumber);
     }
 
-    // Debug
-    std::cout << "Permutation: ";
-    for (std::vector<unsigned int>::iterator it = permutation.begin();
-         it != permutation.end(); it++) {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
+//    // Debug
+//    std::cout << "Permutation: ";
+//    for (std::vector<unsigned int>::iterator it = permutation.begin();
+//         it != permutation.end(); it++) {
+//        std::cout << *it << " ";
+//    }
+//    std::cout << std::endl;
 
     inputStream.close();
 
@@ -67,9 +66,46 @@ FlowProblem readFlowProblem(std::string filename) {
     return flowProblem;
 }
 
+void readSolution(std::string filename, double &expectedCmax,
+                  std::vector<double> &expectedTimes) {
+    std::ifstream inputStream;
 
-//FlowProblemDataReader::FlowProblemDataReader()
-//{
+    inputStream.open(filename.c_str(), std::ifstream::in);
 
-//}
+    if (!inputStream.is_open()) {
+        std::cout <<"File "<< filename <<  " not opened!";
+        return;
+    }
 
+    inputStream >> expectedCmax;
+
+//    // Debug
+//    std::cout << expectedCmax << std::endl;
+
+    expectedTimes.clear();
+
+    while(inputStream.good()) {
+        double value;
+        inputStream >> value;
+
+        if (inputStream.eof()) {
+            break;
+        }
+
+        expectedTimes.push_back(value);
+    }
+
+//    // Debug
+//    for (auto time : expectedTimes) {
+//        std::cout << time << " ";
+//    }
+//    std::cout << std::endl;
+
+
+
+
+
+
+
+    inputStream.close();
+}
