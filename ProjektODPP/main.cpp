@@ -22,6 +22,9 @@ int main(int argc, char *argv[])
     return app.exec();
 */
 
+    mojPrzykladTest();
+    std::cout << "Sama ścieżka krytyczna: " << std::endl;
+    criticalPathTest();
 //    std::cout << "Wynik testu 20_5: " << test20_5() << std::endl;
 //    std::cout << "Wynik testu 20_10: " << test20_10() << std::endl;
 //    std::cout << "Wynik testu 20_20: " << test20_20() << std::endl;

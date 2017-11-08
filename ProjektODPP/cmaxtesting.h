@@ -8,6 +8,7 @@ bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
               double expectedCMax, double expectedTimes[]);
 
 void mojPrzykladTest();
+void criticalPathTest();
 
 bool test20_5();
 bool test20_10();

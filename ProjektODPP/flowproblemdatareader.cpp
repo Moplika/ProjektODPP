@@ -29,7 +29,7 @@ FlowProblem readFlowProblem(std::string filename) {
 //    std::cout << "Machine count: " << machineCount << std::endl;
 
     times.push_back(0.0); //Czas dla zerowego zadania
-    for (int i = 1; i < taskCount*stationCount+1; i++) {
+    for (unsigned int i = 1; i < taskCount*stationCount+1; i++) {
         double time;
         inputStream >> time;
         times.push_back(time);
@@ -43,7 +43,7 @@ FlowProblem readFlowProblem(std::string filename) {
 //    }
 //    std::cout << std::endl;
 
-    for (int i = 0; i < taskCount*stationCount + stationCount * machineCount + 1; i++) {
+    for (unsigned int i = 0; i < taskCount*stationCount + stationCount * machineCount + 1; i++) {
         unsigned int taskNumber;
         inputStream >> taskNumber;
         permutation.push_back(taskNumber);

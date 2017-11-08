@@ -26,8 +26,29 @@ void mojPrzykladTest() {
     // TODO: Zobaczyć, jak działa std::for_each
     for (std::vector<double>::iterator it = totalTimes.begin();
          it != totalTimes.end(); it++, i++) {
-        std::cout << i <<": " << *it << std::endl;
+        std::cout << i <<": " << *it << "   ";
     }
+    std::cout << std::endl;
+
+    flowProblem.printLongerPredecessors();
+
+    std::cout << "Cmax: " << flowProblem.getCMax() << std::endl;
+    std::cout << "Cmax index: " << flowProblem.getCMaxPosition() << std::endl;
+
+    flowProblem.printCriticalPath();
+    flowProblem.printBlockSplit();
+
+}
+
+void criticalPathTest() {
+    FlowProblem flowProblem;
+
+    unsigned int critPathArray[] = {1,4,7,8,11,14,17,18,21,24};
+    std::vector<unsigned int> critPath(critPathArray, critPathArray + sizeof(critPathArray) / sizeof(unsigned int));
+
+    flowProblem.setCriticalPath(critPath);
+    flowProblem.printCriticalPath();
+    flowProblem.printBlockSplit();
 }
 
 bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
