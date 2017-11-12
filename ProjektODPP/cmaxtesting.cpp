@@ -17,8 +17,10 @@ void mojPrzykladTest() {
     std::vector<double> times(timesArray,
                               timesArray + sizeof(timesArray) / sizeof(double));
 
-    flowProblem.setCurrentPermutation(permutation);
-    flowProblem.setTaskTimes(times);
+//    flowProblem.setCurrentPermutation(permutation);
+//    flowProblem.setTaskTimes(times);
+
+    flowProblem.setData(times, permutation);
 
     std::vector<double> totalTimes = flowProblem.getTotalTimes();
     int i = 0;
@@ -32,8 +34,8 @@ void mojPrzykladTest() {
 
     flowProblem.printLongerPredecessors();
 
-    std::cout << "Cmax: " << flowProblem.getCMax() << std::endl;
-    std::cout << "Cmax index: " << flowProblem.getCMaxPosition() << std::endl;
+    std::cout << "Cmax: " << flowProblem.getBestCMax() << std::endl;
+    std::cout << "Cmax index: " << flowProblem.getBestCMaxPosition() << std::endl;
 
     flowProblem.printCriticalPath();
     flowProblem.printBlockSplit();
@@ -59,8 +61,10 @@ bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
     std::vector<unsigned int> testPermutation(permutation, permutation + (n*s + ms*s) );
     std::vector<double> testTimes(times, times + (n*s+1) );
 
-    flowProblem.setCurrentPermutation(testPermutation);
-    flowProblem.setTaskTimes(testTimes);
+//    flowProblem.setCurrentPermutation(testPermutation);
+//    flowProblem.setTaskTimes(testTimes);
+
+    flowProblem.setData(testTimes, testPermutation);
 
     std::vector<double> totalTimes = flowProblem.getTotalTimes();
     double cMax = *(std::max_element(totalTimes.begin(), totalTimes.end()));

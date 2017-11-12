@@ -2,6 +2,7 @@
 #define FLOWPROBLEM_H
 
 #include <vector>
+#include "permutation.h"
 
 
 class FlowProblem
@@ -10,6 +11,9 @@ public:
     FlowProblem();
     FlowProblem(int taskC, int stationC, int machineC);
 
+    void setData(std::vector<double> times,
+                 std::vector<unsigned int> firstPermutation);
+
     unsigned int getTaskCount();
     unsigned int getStationCount();
     unsigned int getMachinesPerStation();
@@ -17,8 +21,8 @@ public:
     unsigned int getTotalMachineCount();
 
     std::vector<double> getTotalTimes();
-    double getCMax();
-    unsigned int getCMaxPosition();
+    double getBestCMax();
+    unsigned int getBestCMaxPosition();
 
     // debug
     void printPreviousTasks();
@@ -26,8 +30,8 @@ public:
     void printCriticalPath();
     void printBlockSplit();
 
-    void setCurrentPermutation(std::vector<unsigned int> permutation);
-    void setTaskTimes(std::vector<double> times);
+//    void setCurrentPermutation(std::vector<unsigned int> permutation);
+//    void setTaskTimes(std::vector<double> times);
     void setCriticalPath(std::vector<unsigned int> criticalPath);
 
 private:
@@ -35,20 +39,22 @@ private:
     unsigned int stationCount; // s
     unsigned int machinesPerStation; // k
 
+    Permutation currentPermutation;
+
     void findTechnologicalPredecessors();
-    void calculateTotalTimes();
-    void findCriticalPath();
-    void splitIntoBlocks();
+//    void calculateTotalTimes();
+//    void findCriticalPath();
+//    void splitIntoBlocks();
 
     std::vector<unsigned int> technologicalPredecessor;
-    std::vector<unsigned int> longerPredecessor;
+//    std::vector<unsigned int> longerPredecessor;
 
-    std::vector<double> totalTimes;
-    std::vector<unsigned int> criticalPath;
-    std::vector<unsigned int> blockSplit;
+//    std::vector<double> totalTimes;
+//    std::vector<unsigned int> criticalPath;
+//    std::vector<unsigned int> blockSplit;
 
-    std::vector<double> taskTimes;
-    std::vector<unsigned int> currentPermutation;
+//    std::vector<double> taskTimes;
+//    std::vector<unsigned int> currentPermutation;
 
 };
 

@@ -16,6 +16,15 @@ FlowProblem::FlowProblem(int taskC, int stationC, int machineC) {
     this->findTechnologicalPredecessors();
 }
 
+void FlowProblem::setData(std::vector<double> times,
+            std::vector<unsigned int> firstPermutation) {
+    currentPermutation.setData(
+                this->getOperationsCount(),
+                times,
+                technologicalPredecessor,
+                firstPermutation);
+}
+
 unsigned int FlowProblem::getTaskCount() {
     return taskCount;
 }
@@ -36,6 +45,32 @@ unsigned int FlowProblem::getTotalMachineCount() {
     return stationCount * machinesPerStation;
 }
 
+//void FlowProblem::setTaskTimes(std::vector<double> times) {
+//    taskTimes = times;
+//}
+
+//std::vector<double> FlowProblem::getTotalTimes() {
+//    // TODO: Przenieść w jakieś lepsze miejsce
+//    this ->calculateTotalTimes();
+//    this->findCriticalPath();
+
+//    return totalTimes;
+//}
+
+std::vector<double> FlowProblem::getTotalTimes() {
+    return currentPermutation.getTotalTimes();
+}
+
+double FlowProblem::getBestCMax() {
+    // TODO: Po napisaniu przestawienia zmienić
+    return currentPermutation.getCMax();
+}
+
+unsigned int FlowProblem::getBestCMaxPosition() {
+    // TODO: Po napisaniu przestawienia zmienić
+    return currentPermutation.getCMaxPosition();
+}
+
 void FlowProblem::findTechnologicalPredecessors() {
     technologicalPredecessor.clear();
 
@@ -50,66 +85,6 @@ void FlowProblem::findTechnologicalPredecessors() {
         if (currentStation % stationCount != 1) {
             *it = currentStation - 1;
         }
-    }
-
-
-}
-
-void FlowProblem::setCurrentPermutation(std::vector<unsigned int> permutation) {
-    currentPermutation = permutation;
-}
-
-void FlowProblem::setTaskTimes(std::vector<double> times) {
-    taskTimes = times;
-}
-
-std::vector<double> FlowProblem::getTotalTimes() {
-    // TODO: Przenieść w jakieś lepsze miejsce
-    this ->calculateTotalTimes();
-    this->findCriticalPath();
-
-    return totalTimes;
-}
-
-double FlowProblem::getCMax() {
-    return *(std::max_element(totalTimes.begin(), totalTimes.end()));
-}
-
-unsigned int FlowProblem::getCMaxPosition() {
-    auto cMaxIt = std::max_element(totalTimes.begin(), totalTimes.end());
-
-    return std::distance(totalTimes.begin(), cMaxIt);
-}
-
-void FlowProblem::calculateTotalTimes() {
-    unsigned int operationCount = getOperationsCount();
-
-    totalTimes.clear();
-    totalTimes.assign(operationCount + 1, 0.0);
-
-    longerPredecessor.clear();
-    longerPredecessor.assign(operationCount + 1, 0.0);
-
-    unsigned int previousOnMachine = 0;
-
-    for (auto const &taskIndex : currentPermutation) {
-        if (taskIndex != 0) {
-            unsigned int previousTask = technologicalPredecessor.at(taskIndex);
-            double previousTaskTime = totalTimes.at(previousTask);
-            double machineFreeTime = totalTimes.at(previousOnMachine);
-
-            double currentTaskTime = taskTimes.at(taskIndex);
-
-            if (machineFreeTime >= previousTaskTime) {
-                totalTimes.at(taskIndex) = machineFreeTime + currentTaskTime;
-                longerPredecessor.at(taskIndex) = previousOnMachine;
-            } else {
-                totalTimes.at(taskIndex) = previousTaskTime + currentTaskTime;
-                longerPredecessor.at(taskIndex) = previousTask;
-            }
-
-        }
-        previousOnMachine = taskIndex;
     }
 }
 
@@ -126,69 +101,19 @@ void FlowProblem::printPreviousTasks() {
 }
 
 void FlowProblem::printLongerPredecessors() {
-    int i = 0;
-
-    std::cout << "Longer predecessors: " << std::endl;
-    for (auto element : longerPredecessor) {
-        std::cout << i << ": " << element << "   ";
-        i++;
-    }
-    std::cout << std::endl;
+    currentPermutation.printLongerPredecessors();
 }
 
 void FlowProblem::printCriticalPath() {
-    std::cout << "Sciezka krytyczna: " << std::endl;
-    for (auto element : criticalPath) {
-        std::cout << element << " ";
-    }
-    std::cout << std::endl;
+    currentPermutation.printCriticalPath();
 }
 
 void FlowProblem::printBlockSplit() {
-    std::cout << "Podział na bloki: " << std::endl;
-    for (auto element : blockSplit) {
-        std::cout << element << " ";
-    }
-    std::cout << std::endl;
+    currentPermutation.printBlockSplit();
 }
 
-void FlowProblem::setCriticalPath(std::vector<unsigned int> critPath) {
-    criticalPath = critPath;
-    this->splitIntoBlocks();
+void FlowProblem::setCriticalPath(std::vector<unsigned int> criticalPath) {
+    currentPermutation.setCriticalPath(criticalPath);
 }
 
-void FlowProblem::findCriticalPath() {
-    unsigned int previousElement = this->getCMaxPosition();
 
-    while (previousElement != 0) {
-        criticalPath.push_back(previousElement);
-
-        previousElement = longerPredecessor.at(previousElement);
-    }
-
-    std::reverse(criticalPath.begin(), criticalPath.end());
-    this->splitIntoBlocks();
-}
-
-void FlowProblem::splitIntoBlocks() {
-    int criticalPathLength = criticalPath.size();
-
-    blockSplit.clear();
-    blockSplit.assign(criticalPathLength, 0.0);
-
-    unsigned int previousElement = criticalPath.front();
-    int i = 0;
-
-    for (auto element : criticalPath) {
-        if (element - previousElement == 1) {
-            blockSplit.at(i-1) = 2;
-            blockSplit.at(i) = 1;
-        }
-        previousElement = element;
-        i++;
-    }
-
-    blockSplit.front() = 1;
-    blockSplit.back() = 2;
-
-}

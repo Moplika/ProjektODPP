@@ -5,7 +5,8 @@ CONFIG += c++11
 SOURCES += main.cpp \
     flowproblem.cpp \
     cmaxtesting.cpp \
-    flowproblemdatareader.cpp
+    flowproblemdatareader.cpp \
+    permutation.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     flowproblem.h \
     cmaxtesting.h \
-    flowproblemdatareader.h
+    flowproblemdatareader.h \
+    permutation.h
