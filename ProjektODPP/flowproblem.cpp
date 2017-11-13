@@ -45,18 +45,6 @@ unsigned int FlowProblem::getTotalMachineCount() {
     return stationCount * machinesPerStation;
 }
 
-//void FlowProblem::setTaskTimes(std::vector<double> times) {
-//    taskTimes = times;
-//}
-
-//std::vector<double> FlowProblem::getTotalTimes() {
-//    // TODO: Przenieść w jakieś lepsze miejsce
-//    this ->calculateTotalTimes();
-//    this->findCriticalPath();
-
-//    return totalTimes;
-//}
-
 std::vector<double> FlowProblem::getTotalTimes() {
     return currentPermutation.getTotalTimes();
 }

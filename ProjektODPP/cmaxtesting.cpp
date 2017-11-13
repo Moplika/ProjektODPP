@@ -17,9 +17,6 @@ void mojPrzykladTest() {
     std::vector<double> times(timesArray,
                               timesArray + sizeof(timesArray) / sizeof(double));
 
-//    flowProblem.setCurrentPermutation(permutation);
-//    flowProblem.setTaskTimes(times);
-
     flowProblem.setData(times, permutation);
 
     std::vector<double> totalTimes = flowProblem.getTotalTimes();
@@ -39,7 +36,6 @@ void mojPrzykladTest() {
 
     flowProblem.printCriticalPath();
     flowProblem.printBlockSplit();
-
 }
 
 void criticalPathTest() {
@@ -61,9 +57,6 @@ bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
     std::vector<unsigned int> testPermutation(permutation, permutation + (n*s + ms*s) );
     std::vector<double> testTimes(times, times + (n*s+1) );
 
-//    flowProblem.setCurrentPermutation(testPermutation);
-//    flowProblem.setTaskTimes(testTimes);
-
     flowProblem.setData(testTimes, testPermutation);
 
     std::vector<double> totalTimes = flowProblem.getTotalTimes();
@@ -78,9 +71,7 @@ bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
     }
 
     return (cMax == expectedCMax);
-
 }
-
 
 bool test20_5() {
     unsigned int n = 20;

@@ -148,7 +148,7 @@ void Permutation::printCriticalPath() {
 }
 
 void Permutation::printBlockSplit() {
-    std::cout << "Podział na bloki: " << std::endl;
+    std::cout << "Podzial na bloki: " << std::endl;
     for (auto element : blockSplit) {
         std::cout << element << " ";
     }

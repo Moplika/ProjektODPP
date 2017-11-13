@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 */
 
     mojPrzykladTest();
-    std::cout << "Sama ścieżka krytyczna: " << std::endl;
+    std::cout << "Sama sciezka krytyczna: " << std::endl;
     criticalPathTest();
     std::cout << "Wynik testu 20_5: " << test20_5() << std::endl;
     std::cout << "Wynik testu 20_10: " << test20_10() << std::endl;
