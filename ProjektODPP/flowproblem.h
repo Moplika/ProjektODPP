@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "permutation.h"
+#include "station.h"
 
 
 class FlowProblem
@@ -20,6 +21,9 @@ public:
     unsigned int getOperationsCount();
     unsigned int getTotalMachineCount();
 
+    Permutation getCurrentPermutation();
+    std::vector<Station> getStationBoundries();
+
     std::vector<double> getTotalTimes();
     double getBestCMax();
     unsigned int getBestCMaxPosition();
@@ -29,6 +33,8 @@ public:
     void printLongerPredecessors();
     void printCriticalPath();
     void printBlockSplit();
+    void printStationBoundries();
+    void printCurrentPermutation();
 
     void setCriticalPath(std::vector<unsigned int> criticalPath);
 
@@ -40,8 +46,13 @@ private:
     Permutation currentPermutation;
 
     void findTechnologicalPredecessors();
+    void findStationBoundries();
 
     std::vector<unsigned int> technologicalPredecessor;
+    std::vector<Station> stationBoundries;
+
 };
+
+
 
 #endif // FLOWPROBLEM_H

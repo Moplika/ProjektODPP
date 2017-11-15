@@ -155,7 +155,90 @@ void Permutation::printBlockSplit() {
     std::cout << std::endl;
 }
 
+void Permutation::printCurrentPermutation() {
+    std::cout << "Aktualna permutacja: " << std::endl;
+    for (auto element : currentPermutation) {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+
 void Permutation::setCriticalPath(std::vector<unsigned int> critPath) {
     criticalPath = critPath;
     this->splitIntoBlocks();
+}
+
+void Permutation::recalculateTimes() {
+    this->calculateTotalTimes();
+    this->findCriticalPath();
+}
+
+void Permutation::swapElementPosition(int elementPosition, int finalPosition) {
+    unsigned int element = currentPermutation.at(elementPosition);
+
+    auto elementIt = currentPermutation.begin() + elementPosition;
+    currentPermutation.erase(elementIt);
+
+    auto finalIt = currentPermutation.begin() + finalPosition;// - 1; // -1 Bo chcemy, żeby wstawiał przed
+    currentPermutation.insert(finalIt, element);
+}
+
+void Permutation::insertInFront(int elementPosition, int finalPosition) {
+    this->swapElementPosition(elementPosition, finalPosition);
+    this->recalculateTimes();
+}
+
+void Permutation::findBestPosition(unsigned int elementNumber, Station station) {
+    if (!isPartOfCriticalPath(elementNumber)) {
+        std::cout << "Wybrany element nie nalezy do sciezki krytycznej!" << std::endl;
+        return;
+    }
+
+    unsigned int elementPosition = this->findElementPosition(elementNumber);
+
+//    auto originalPermutation = currentPermutation;
+
+    double bestCMax = this->getCMax();
+    auto bestPermutation = currentPermutation;
+
+    for (unsigned int position = station.firstPosition;
+         position <= station.lastPosition; position++) {
+        this->swapElementPosition(elementPosition, position);
+        this->calculateTotalTimes();
+
+        if (this->getCMax() < bestCMax) {
+            bestCMax = this->getCMax();
+            bestPermutation = currentPermutation;
+        }
+        elementPosition = position;
+
+        //Debug
+        this->printCurrentPermutation();
+        std::cout << "Cmax: " << this->getCMax() << std::endl;
+    }
+
+    currentPermutation = bestPermutation;
+    this->recalculateTimes();
+}
+
+bool Permutation::isPartOfCriticalPath(unsigned int element) {
+    for (auto critPathElement : criticalPath) {
+        if (critPathElement == element) {
+            return true;
+        }
+    }
+    return false;
+}
+
+unsigned int Permutation::findElementPosition(unsigned int element) {
+    unsigned int position = 0;
+
+    for (auto permutationElement : currentPermutation) {
+        if (permutationElement == element) {
+            return position;
+        }
+        position++;
+    }
+
+    return 0;
 }

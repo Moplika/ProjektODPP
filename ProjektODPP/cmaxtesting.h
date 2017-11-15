@@ -10,6 +10,12 @@ bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
 void mojPrzykladTest();
 void criticalPathTest();
 
+void permutationSingleSwapTest();
+void permutationSwapingTest();
+void stationBoundriesTest();
+
+void permutationSwapingTest15_2();
+
 bool test20_5();
 bool test20_10();
 bool test20_20();

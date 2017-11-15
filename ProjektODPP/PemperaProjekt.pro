@@ -36,4 +36,5 @@ HEADERS += \
     flowproblem.h \
     cmaxtesting.h \
     flowproblemdatareader.h \
-    permutation.h
+    permutation.h \
+    station.h

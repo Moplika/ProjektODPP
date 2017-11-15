@@ -23,6 +23,8 @@ void FlowProblem::setData(std::vector<double> times,
                 times,
                 technologicalPredecessor,
                 firstPermutation);
+
+    this->findStationBoundries();
 }
 
 unsigned int FlowProblem::getTaskCount() {
@@ -47,6 +49,14 @@ unsigned int FlowProblem::getTotalMachineCount() {
 
 std::vector<double> FlowProblem::getTotalTimes() {
     return currentPermutation.getTotalTimes();
+}
+
+Permutation FlowProblem::getCurrentPermutation() {
+    return currentPermutation;
+}
+
+std::vector<Station> FlowProblem::getStationBoundries() {
+    return stationBoundries;
 }
 
 double FlowProblem::getBestCMax() {
@@ -100,8 +110,45 @@ void FlowProblem::printBlockSplit() {
     currentPermutation.printBlockSplit();
 }
 
+void FlowProblem::printStationBoundries() {
+    std::cout << "Podzial na stacje: " << std::endl;
+    for (auto station : stationBoundries) {
+        std::cout << "Stanowisko " << station.id << " - poczatek: " << station.firstPosition
+                  << ", koniec: " << station.lastPosition << std::endl;
+    }
+}
+
+void FlowProblem::printCurrentPermutation() {
+    currentPermutation.printCurrentPermutation();
+}
+
 void FlowProblem::setCriticalPath(std::vector<unsigned int> criticalPath) {
     currentPermutation.setCriticalPath(criticalPath);
 }
 
+void FlowProblem::findStationBoundries() {
+    stationBoundries.clear();
 
+    auto permutation = currentPermutation.getCurrentPermutation();
+
+    unsigned int elementIndex = 1;
+    unsigned int zeroCount = 0;
+    unsigned int stationCount = 1;
+    unsigned int firstElement = 1;
+
+    for (auto it = permutation.begin() + 1; it != permutation.end(); it++, elementIndex++) {
+        if (*it == 0) {
+            zeroCount++;
+
+            if (zeroCount % machinesPerStation == 0) {
+                unsigned int lastElement = elementIndex - 1;
+                Station newStation(stationCount, firstElement, lastElement);
+
+                stationBoundries.push_back(newStation);
+                stationCount++;
+
+                firstElement = elementIndex + 1;
+            }
+        }
+    }
+}

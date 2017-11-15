@@ -1,5 +1,7 @@
 #include "cmaxtesting.h"
 #include "flowproblem.h"
+#include "permutation.h"
+#include "flowproblemdatareader.h"
 
 #include <iostream>
 #include <algorithm>
@@ -38,6 +40,74 @@ void mojPrzykladTest() {
     flowProblem.printBlockSplit();
 }
 
+void permutationSwapingTest() {
+    unsigned int permutationArray[] = {0, 1, 5, 0, 3, 7, 0, 2, 6, 0, 4, 8, 0};
+    std::vector<unsigned int> permutationVector(permutationArray,
+                                                permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
+    double timesArray[] = {0,4,3,2,4,3,5,6,3};
+    std::vector<double> times(timesArray,
+                              timesArray + sizeof(timesArray) / sizeof(double));
+
+    unsigned int predecessorArray[] = {0,0,1,0,3,0,5,0,7};
+    std::vector<unsigned int> predecessors(predecessorArray,
+                                           predecessorArray + sizeof(predecessorArray) / sizeof(unsigned int));
+
+    Permutation permutation(8, times, predecessors, permutationVector);
+    Station station(2,7,11);
+
+    std::cout << "Przestawianie: " << std::endl;
+    permutation.findBestPosition(6, station);
+
+    std::cout << "Best permutation: " << std::endl;
+    permutation.printCurrentPermutation();
+    std::cout << "Cmax: " << permutation.getCMax() << std::endl;
+}
+
+void permutationSwapingTest15_2() {
+    unsigned int permutationArray[] = {0,1,25,17,11,3,29,19,7, \
+                                       0,13,5,23,27,15,21,9, \
+                                       0,2,6,24,28,4,20,22,10,\
+                                       0,14,26,18,12,16,30,8,0};
+    std::vector<unsigned int> permutationVector(permutationArray,
+                                                permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
+
+    double timesArray[] = {0,5,3,4,4,4,4,3,4,5,3,2,3,3,6,6,2,5,2,5,5,8,7,3,4,3,2,5,4,3,4};
+    std::vector<double> times(timesArray,
+                              timesArray + sizeof(timesArray) / sizeof(double));
+
+    FlowProblem flowProblem(15, 2, 2);
+    flowProblem.setData(times, permutationVector);
+
+    flowProblem.printCurrentPermutation();
+    std::cout << "Poczatkowe cMax: " << flowProblem.getBestCMax() << std::endl;
+
+//    auto totalTimes = flowProblem.getTotalTimes();
+//    int i = 1;
+//    for (auto time : totalTimes) {
+//        std::cout << i << ": " << time << "   ";
+//        i++;
+
+//        if (i % 10 == 0) {
+//            std::cout << std::endl;
+//        }
+//    }
+//    std::cout << std::endl;
+
+    flowProblem.printCriticalPath();
+    flowProblem.printBlockSplit();
+
+    Permutation permutation = flowProblem.getCurrentPermutation();
+    auto stations = flowProblem.getStationBoundries();
+
+    std::cout << "Przestawianie: " << std::endl;
+    permutation.findBestPosition(22, stations.at(1));
+
+    std::cout << "Best permutation: " << std::endl;
+    permutation.printCurrentPermutation();
+    std::cout << "Cmax: " << permutation.getCMax() << std::endl;
+
+}
+
 void criticalPathTest() {
     FlowProblem flowProblem;
 
@@ -47,6 +117,45 @@ void criticalPathTest() {
     flowProblem.setCriticalPath(critPath);
     flowProblem.printCriticalPath();
     flowProblem.printBlockSplit();
+}
+
+void permutationSingleSwapTest() {
+    unsigned int permutationArray[] = {0, 1, 5, 0, 3, 7, 0, 2, 6, 0, 4, 8, 0};
+    std::vector<unsigned int> permutationVector(permutationArray,
+                                                permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
+    double timesArray[] = {0,4,3,2,4,3,5,6,3};
+    std::vector<double> times(timesArray,
+                              timesArray + sizeof(timesArray) / sizeof(double));
+
+    unsigned int predecessorArray[] = {0,0,1,0,3,0,5,0,7};
+    std::vector<unsigned int> predecessors(predecessorArray,
+                                           predecessorArray + sizeof(predecessorArray) / sizeof(unsigned int));
+
+    Permutation permutation(8, times, predecessors, permutationVector);
+    std::cout << "Przed swapem:" << std::endl;
+    permutation.printCurrentPermutation();
+
+    std::cout << "Po swapie: " << std::endl;
+    permutation.insertInFront(4, 7);
+    permutation.printCurrentPermutation();
+
+}
+
+void stationBoundriesTest() {
+    FlowProblem  flowProblem(4, 2, 2);
+
+    unsigned int permutationArray[] = {0, 1, 5, 0, 3, 7, 0, 2, 6, 0, 4, 8, 0};
+    double timesArray[] = {0,4,3,2,4,3,5,6,3};
+
+    std::vector<unsigned int> permutation(permutationArray,
+                                          permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
+    std::vector<double> times(timesArray,
+                              timesArray + sizeof(timesArray) / sizeof(double));
+
+    flowProblem.setData(times, permutation);
+
+    flowProblem.printCurrentPermutation();
+    flowProblem.printStationBoundries();
 }
 
 bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
