@@ -5,8 +5,7 @@ CONFIG += c++11
 SOURCES += main.cpp \
     flowproblem.cpp \
     cmaxtesting.cpp \
-    flowproblemdatareader.cpp \
-    permutation.cpp
+    flowproblemdatareader.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,5 +35,4 @@ HEADERS += \
     flowproblem.h \
     cmaxtesting.h \
     flowproblemdatareader.h \
-    permutation.h \
     station.h
