@@ -2,7 +2,6 @@
 #define FLOWPROBLEM_H
 
 #include <vector>
-#include "permutation.h"
 #include "station.h"
 
 
@@ -21,7 +20,6 @@ public:
     unsigned int getOperationsCount();
     unsigned int getTotalMachineCount();
 
-    Permutation getCurrentPermutation();
     std::vector<Station> getStationBoundries();
 
     std::vector<double> getTotalTimes();

@@ -196,9 +196,7 @@ void FlowProblem::insertBehind(int elementPosition, int finalPosition) {
 }
 
 void FlowProblem::findBestPermutation() {
-
     auto originalPermutation = currentPermutation;
-//    unsigned int elementPosition = this->findElementPosition(elementNumber);
 
     double bestCMax = this->getCMax();
     auto bestPermutation = currentPermutation;
@@ -207,8 +205,6 @@ void FlowProblem::findBestPermutation() {
 
         unsigned int elementPosition = this->findPositionInPermutation(critPathElement);
 
-        //TODO: Automatyczne wykrywanie, na której stacji jest element
-        //Station station = stationBoundries.at(1);
         Station station = this->findStation(elementPosition);
 
         for (unsigned int position = station.firstPosition;
@@ -226,7 +222,7 @@ void FlowProblem::findBestPermutation() {
             this->printCurrentPermutation();
             std::cout << "Cmax: " << this->getCMax() << std::endl;
         }
-        currentPermutation = bestPermutation;
+        currentPermutation = originalPermutation;
     }
     currentPermutation = bestPermutation;
     this->recalculateTimes();

@@ -1,6 +1,5 @@
 #include "cmaxtesting.h"
 #include "flowproblem.h"
-#include "permutation.h"
 #include "flowproblemdatareader.h"
 
 #include <iostream>
@@ -88,7 +87,6 @@ void permutationSwapingTest15_2() {
     std::cout << "Best permutation: " << std::endl;
     flowProblem.printCurrentPermutation();
     std::cout << "Cmax: " << flowProblem.getCMax() << std::endl;
-
 }
 
 void criticalPathTest() {
