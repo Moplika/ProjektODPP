@@ -36,6 +36,8 @@ public:
     void printBlockSplit();
     void printStationBoundries();
     void printCurrentPermutation();
+    void printPositionsInPermutation();
+    void printPositionOnMachine();
 
     void setCriticalPath(std::vector<unsigned int> criticalPath);
 
@@ -53,13 +55,28 @@ private:
     void splitIntoBlocks();
     void findStationBoundries();
 
+    void determinePositionInPermutationAndOnMachine();
+
     void swapElementPosition(int elementPosition, int finalPosition);
     unsigned int findPositionInPermutation(unsigned int element);
     Station findStation(unsigned int element);
 
     void recalculateTimes();
+    void findBestPermutationForElement(unsigned int firstPosition,
+                                       unsigned int lastPosition,
+                                       unsigned int elementPosition,
+                                       double &bestCMax,
+                                       std::vector<unsigned int> &bestPermutation,
+                                       int &counter);
+    void findBlockBoundries(std::vector<unsigned int>::iterator blockSplitIt,
+                            unsigned int &blockStart, unsigned int &blockStop);
+
+
 
     std::vector<unsigned int> currentPermutation;
+    std::vector<unsigned int> positionInPermutation;
+    std::vector<unsigned int> positionOnMachine;
+
     std::vector<double> taskTimes;
 
     std::vector<unsigned int> technologicalPredecessor;

@@ -37,6 +37,9 @@ void mojPrzykladTest() {
 
     flowProblem.printCriticalPath();
     flowProblem.printBlockSplit();
+
+    flowProblem.printPositionsInPermutation();
+    flowProblem.printPositionOnMachine();
 }
 
 void permutationSwapingTest() {

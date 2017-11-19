@@ -21,10 +21,11 @@ void FlowProblem::setData(std::vector<double> times,
     currentPermutation = firstPermutation;
     taskTimes = times;
 
-    this->calculateTotalTimes();
-    this->findCriticalPath();
-
     this->findStationBoundries();
+
+    this->recalculateTimes();
+
+
 }
 
 unsigned int FlowProblem::getTaskCount() {
@@ -196,36 +197,97 @@ void FlowProblem::insertBehind(int elementPosition, int finalPosition) {
 }
 
 void FlowProblem::findBestPermutation() {
+    int tempCnt = 0;
+
     auto originalPermutation = currentPermutation;
 
     double bestCMax = this->getCMax();
     auto bestPermutation = currentPermutation;
 
+    auto blockSplitIt = blockSplit.begin();
+
     for (auto critPathElement : criticalPath) {
 
         unsigned int elementPosition = this->findPositionInPermutation(critPathElement);
-
         Station station = this->findStation(elementPosition);
+        unsigned int blockSign = *blockSplitIt;
 
-        for (unsigned int position = station.firstPosition;
-             position <= station.lastPosition; position++) {
-            this->swapElementPosition(elementPosition, position);
-            this->calculateTotalTimes();
+        unsigned int firstPosition = 0;
+        unsigned int lastPosition = 0;
 
-            if (this->getCMax() < bestCMax) {
-                bestCMax = this->getCMax();
-                bestPermutation = currentPermutation;
-            }
-            elementPosition = position;
+        switch (blockSign) {
+        //TODO: Dodać przenoszenie na inną maszynę
+//        case 1: //Początek
+//            firstPosition = station.firstPosition;
+//            lastPosition = elementPosition;
 
-            //Debug
-            this->printCurrentPermutation();
-            std::cout << "Cmax: " << this->getCMax() << std::endl;
+//            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+//                                                bestCMax, bestPermutation, tempCnt);
+//            break;
+//        case 2:
+//            firstPosition = elementPosition;
+//            lastPosition = station.lastPosition;
+//            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+//                                                bestCMax, bestPermutation, tempCnt);
+//            break;
+            /*case 0:
+            // TODO: Fix this...
+            unsigned int firstInBlock;
+            unsigned int lastInBlock;
+
+            this->findBlockBoundries(blockSplitIt, firstInBlock, lastInBlock);
+
+            firstPosition = station.firstPosition;
+            lastPosition = std::max(firstInBlock - 1,(unsigned int) 0);
+            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+                                                bestCMax, bestPermutation, tempCnt);
+
+            firstPosition = std::min(lastInBlock + 1, station.lastPosition);
+            lastPosition = station.lastPosition;
+            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+                                                bestCMax, bestPermutation, tempCnt);
+            break; */
+        default:
+            firstPosition = station.firstPosition;
+            lastPosition = station.lastPosition;
+
+            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+                                                bestCMax, bestPermutation, tempCnt);
         }
+
+
+
         currentPermutation = originalPermutation;
+        blockSplitIt++;
     }
     currentPermutation = bestPermutation;
     this->recalculateTimes();
+
+    std::cout << "Wykonano " << tempCnt << " iteracji" << std::endl;
+}
+
+void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
+                                                unsigned int lastPosition,
+                                                unsigned int elementPosition,
+                                                double &bestCMax,
+                                                std::vector<unsigned int> &bestPermutation,
+                                                int &counter) {
+    for (unsigned int position = firstPosition;
+         position <= lastPosition; position++) {
+        this->swapElementPosition(elementPosition, position);
+        this->calculateTotalTimes();
+
+        if (this->getCMax() < bestCMax) {
+            bestCMax = this->getCMax();
+            bestPermutation = currentPermutation;
+        }
+        elementPosition = position;
+
+        //Debug
+        this->printCurrentPermutation();
+        std::cout << "Cmax: " << this->getCMax() << std::endl;
+        counter++;
+    }
 }
 
 unsigned int FlowProblem::findPositionInPermutation(unsigned int element) {
@@ -239,8 +301,8 @@ unsigned int FlowProblem::findPositionInPermutation(unsigned int element) {
     return 0;
 }
 
-Station FlowProblem::findStation(unsigned int element) {
-    unsigned int elementPosition = this->findPositionInPermutation(element);
+Station FlowProblem::findStation(unsigned int elementPosition) {
+    //    unsigned int elementPosition = this->findPositionInPermutation(element);
 
     for (auto station : stationBoundries) {
         if (elementPosition >= station.firstPosition && elementPosition <= station.lastPosition) {
@@ -251,11 +313,56 @@ Station FlowProblem::findStation(unsigned int element) {
     return stationBoundries.front();
 }
 
+void FlowProblem::findBlockBoundries(std::vector<unsigned int>::iterator blockSplitIt,
+                                     unsigned int &blockStart, unsigned int &blockStop) {
+    unsigned int elementIndex = std::distance(blockSplit.begin(), blockSplitIt);
+
+    unsigned int index = elementIndex;
+    for (auto it = blockSplitIt; it != blockSplit.end(); it++, index++) {
+        if (*it == 2) {
+            //blockStop = index;
+            blockStop = this->findPositionInPermutation(criticalPath.at(index));
+            break;
+        }
+    }
+
+    index = elementIndex;
+    for (auto it = blockSplitIt; it != blockSplit.begin()-1; it--, index--) {
+        if (*it == 1) {
+            //blockStart = index;
+            blockStart = this->findPositionInPermutation(criticalPath.at(index));
+            break;
+        }
+    }
+}
+
 void FlowProblem::recalculateTimes() {
     this->calculateTotalTimes();
     this->findCriticalPath();
+    this->determinePositionInPermutationAndOnMachine();
 }
 
+void FlowProblem::determinePositionInPermutationAndOnMachine() {
+    positionInPermutation.clear();
+    positionInPermutation.assign(getOperationsCount()+1, 0);
+
+    positionOnMachine.clear();
+    positionOnMachine.assign(getOperationsCount()+1, 0);
+
+    unsigned int i = 0;
+    unsigned int ms = 0;
+
+    for (auto element : currentPermutation) {
+        positionInPermutation.at(element) = i;
+
+        if (element == 0) {
+            ms++;
+        } else {
+            positionOnMachine.at(element) = ms;
+        }
+        i++;
+    }
+}
 
 
 
@@ -307,9 +414,31 @@ void FlowProblem::printStationBoundries() {
 }
 
 void FlowProblem::printCurrentPermutation() {
-    std::cout << "Aktualna permutacja: " << std::endl;
+    //    std::cout << "Aktualna permutacja: " << std::endl;
     for (auto element : currentPermutation) {
         std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+
+void FlowProblem::printPositionsInPermutation() {
+    std::cout << "Pozycje elementow w permutacji: " << std::endl;
+
+    int i = 0;
+    for (auto element : positionInPermutation) {
+        std::cout << i << ": " << element << "   ";
+        i++;
+    }
+    std::cout << std::endl;
+}
+
+void FlowProblem::printPositionOnMachine() {
+    std::cout << "Pozycje elementow na maszynie: " << std::endl;
+
+    int i = 0;
+    for (auto element : positionOnMachine) {
+        std::cout << i << ": " << element << "   ";
+        i++;
     }
     std::cout << std::endl;
 }
