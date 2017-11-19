@@ -15,6 +15,8 @@ void permutationSwapingTest();
 void stationBoundriesTest();
 
 void permutationSwapingTest15_2();
+void permutationSwapingTest15_22();
+
 
 bool test20_5();
 bool test20_10();

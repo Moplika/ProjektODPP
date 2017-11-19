@@ -24,8 +24,6 @@ void FlowProblem::setData(std::vector<double> times,
     this->findStationBoundries();
 
     this->recalculateTimes();
-
-
 }
 
 unsigned int FlowProblem::getTaskCount() {
@@ -91,14 +89,13 @@ void FlowProblem::findTechnologicalPredecessors() {
 void FlowProblem::findStationBoundries() {
     stationBoundries.clear();
 
-    auto permutation = currentPermutation;
-
     unsigned int elementIndex = 1;
     unsigned int zeroCount = 0;
     unsigned int stationCount = 1;
     unsigned int firstElement = 1;
 
-    for (auto it = permutation.begin() + 1; it != permutation.end(); it++, elementIndex++) {
+    for (auto it = currentPermutation.begin() + 1; it != currentPermutation.end();
+         it++, elementIndex++) {
         if (*it == 0) {
             zeroCount++;
 
@@ -111,6 +108,29 @@ void FlowProblem::findStationBoundries() {
 
                 firstElement = elementIndex + 1;
             }
+        }
+    }
+}
+
+void FlowProblem::findMachineBoundries() {
+    machineBoundries.clear();
+
+    unsigned int elementIndex = 1;
+    unsigned int zeroCount = 0;
+    unsigned int machineCount = 1;
+    unsigned int firstElement = 1;
+
+    for (auto it = currentPermutation.begin() + 1; it != currentPermutation.end();
+         it++, elementIndex++) {
+        if (*it == 0) {
+            zeroCount++;
+
+            unsigned int lastElement = elementIndex - 1;
+            Machine newMachine(machineCount, firstElement, lastElement);
+            machineBoundries.push_back(newMachine);
+            machineCount++;
+
+            firstElement = elementIndex + 1;
         }
     }
 }
@@ -163,22 +183,22 @@ void FlowProblem::splitIntoBlocks() {
     int criticalPathLength = criticalPath.size();
 
     blockSplit.clear();
-    blockSplit.assign(criticalPathLength, 0.0);
+    blockSplit.assign(criticalPathLength, BlockPosition::blockMiddle);
 
     unsigned int previousElement = criticalPath.front();
     int i = 0;
 
     for (auto element : criticalPath) {
         if (element - previousElement == 1) {
-            blockSplit.at(i-1) = 2;
-            blockSplit.at(i) = 1;
+            blockSplit.at(i-1) = BlockPosition::blockEnd;
+            blockSplit.at(i) = BlockPosition::blockStart;
         }
         previousElement = element;
         i++;
     }
 
-    blockSplit.front() = 1;
-    blockSplit.back() = 2;
+    blockSplit.front() = BlockPosition::blockStart;
+    blockSplit.back() = BlockPosition::blockEnd;
 }
 
 void FlowProblem::swapElementPosition(int elementPosition, int finalPosition) {
@@ -208,8 +228,12 @@ void FlowProblem::findBestPermutation() {
 
     for (auto critPathElement : criticalPath) {
 
+        // Debug
+        std::cout << "Przestawiamy " << critPathElement << std::endl;
+
         unsigned int elementPosition = this->findPositionInPermutation(critPathElement);
-        Station station = this->findStation(elementPosition);
+        Station station = this->findStation(critPathElement);
+        Machine machine = this->findMachine(critPathElement);
         unsigned int blockSign = *blockSplitIt;
 
         unsigned int firstPosition = 0;
@@ -217,36 +241,54 @@ void FlowProblem::findBestPermutation() {
 
         switch (blockSign) {
         //TODO: Dodać przenoszenie na inną maszynę
-//        case 1: //Początek
-//            firstPosition = station.firstPosition;
-//            lastPosition = elementPosition;
+        case BlockPosition::blockStart:
+            // Przenoszenie przed blok na maszynie
+            firstPosition = machine.firstPosition;
+            lastPosition = elementPosition - 1;
 
-//            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-//                                                bestCMax, bestPermutation, tempCnt);
-//            break;
-//        case 2:
-//            firstPosition = elementPosition;
-//            lastPosition = station.lastPosition;
-//            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-//                                                bestCMax, bestPermutation, tempCnt);
-//            break;
-            /*case 0:
-            // TODO: Fix this...
-            unsigned int firstInBlock;
-            unsigned int lastInBlock;
+            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+                                                bestCMax, bestPermutation, tempCnt);
+
+            // Inne maszyny
+            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestPermutation, tempCnt);
+
+            break;
+        case BlockPosition::blockEnd:
+            // Przenoszenie za blok na maszynie
+            firstPosition = elementPosition + 1;
+            lastPosition = machine.lastPosition;
+            this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+                                                bestCMax, bestPermutation, tempCnt);
+
+            // Inne maszyny
+            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestPermutation, tempCnt);
+
+            break;
+
+        case BlockPosition::blockMiddle:
+            int firstInBlock;
+            int lastInBlock;
 
             this->findBlockBoundries(blockSplitIt, firstInBlock, lastInBlock);
 
-            firstPosition = station.firstPosition;
-            lastPosition = std::max(firstInBlock - 1,(unsigned int) 0);
+            // Ta sama maszyna, przed blokiem
+            firstPosition = machine.firstPosition;
+            lastPosition = std::max(firstInBlock, machine.firstPosition);
+
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
                                                 bestCMax, bestPermutation, tempCnt);
 
-            firstPosition = std::min(lastInBlock + 1, station.lastPosition);
-            lastPosition = station.lastPosition;
+            // Ta sama maszyna, za blokiem
+            firstPosition = std::min(lastInBlock + 1, machine.lastPosition);
+            lastPosition = machine.lastPosition;
+
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
                                                 bestCMax, bestPermutation, tempCnt);
-            break; */
+
+            // Inne maszyny
+            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestPermutation, tempCnt);
+
+            break;
         default:
             firstPosition = station.firstPosition;
             lastPosition = station.lastPosition;
@@ -254,9 +296,6 @@ void FlowProblem::findBestPermutation() {
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
                                                 bestCMax, bestPermutation, tempCnt);
         }
-
-
-
         currentPermutation = originalPermutation;
         blockSplitIt++;
     }
@@ -266,12 +305,34 @@ void FlowProblem::findBestPermutation() {
     std::cout << "Wykonano " << tempCnt << " iteracji" << std::endl;
 }
 
+void FlowProblem::tryDifferentMachines(Machine machine, Station station, unsigned int &elementPosition,
+                                       double &bestCMax, std::vector<unsigned int> &bestPermutation,
+                                       int &counter) {
+    // Przenoszenie na inną maszynę - wcześniejsze maszyny
+    unsigned int firstPosition = station.firstPosition;
+    unsigned int lastPosition = machine.firstPosition - 1;
+
+    this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+                                        bestCMax, bestPermutation, counter);
+
+    // Przenoszenie na inną maszynę - następne maszyny
+    firstPosition = machine.lastPosition + 1;
+    lastPosition = station.lastPosition;
+
+    this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
+                                        bestCMax, bestPermutation, counter);
+}
+
 void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
                                                 unsigned int lastPosition,
-                                                unsigned int elementPosition,
+                                                unsigned int &elementPosition,
                                                 double &bestCMax,
                                                 std::vector<unsigned int> &bestPermutation,
                                                 int &counter) {
+    if (elementPosition == lastPosition || firstPosition > lastPosition) {
+        return;
+    }
+
     for (unsigned int position = firstPosition;
          position <= lastPosition; position++) {
         this->swapElementPosition(elementPosition, position);
@@ -290,19 +351,12 @@ void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
     }
 }
 
-unsigned int FlowProblem::findPositionInPermutation(unsigned int element) {
-    unsigned int i = 0;
-    for (auto permElement : currentPermutation) {
-        if (element == permElement) {
-            return i;
-        }
-        i++;
-    }
-    return 0;
+int FlowProblem::findPositionInPermutation(unsigned int element) {
+    return positionInPermutation.at(element);
 }
 
-Station FlowProblem::findStation(unsigned int elementPosition) {
-    //    unsigned int elementPosition = this->findPositionInPermutation(element);
+Station FlowProblem::findStation(unsigned int element) {
+    int elementPosition = this->findPositionInPermutation(element);
 
     for (auto station : stationBoundries) {
         if (elementPosition >= station.firstPosition && elementPosition <= station.lastPosition) {
@@ -313,8 +367,13 @@ Station FlowProblem::findStation(unsigned int elementPosition) {
     return stationBoundries.front();
 }
 
-void FlowProblem::findBlockBoundries(std::vector<unsigned int>::iterator blockSplitIt,
-                                     unsigned int &blockStart, unsigned int &blockStop) {
+Machine FlowProblem::findMachine(unsigned int element) {
+    unsigned int machineID = positionOnMachine.at(element);
+    return machineBoundries.at(machineID-1);
+}
+
+void FlowProblem::findBlockBoundries(std::vector<BlockPosition>::iterator blockSplitIt,
+                                     int &blockStart, int &blockStop) {
     unsigned int elementIndex = std::distance(blockSplit.begin(), blockSplitIt);
 
     unsigned int index = elementIndex;
@@ -340,6 +399,7 @@ void FlowProblem::recalculateTimes() {
     this->calculateTotalTimes();
     this->findCriticalPath();
     this->determinePositionInPermutationAndOnMachine();
+    this->findMachineBoundries();
 }
 
 void FlowProblem::determinePositionInPermutationAndOnMachine() {
@@ -409,6 +469,14 @@ void FlowProblem::printStationBoundries() {
     std::cout << "Podzial na stacje: " << std::endl;
     for (auto station : stationBoundries) {
         std::cout << "Stanowisko " << station.id << " - poczatek: " << station.firstPosition
+                  << ", koniec: " << station.lastPosition << std::endl;
+    }
+}
+
+void FlowProblem::printMachineBoundries() {
+    std::cout << "Podzial na maszyny: " << std::endl;
+    for (auto station : machineBoundries) {
+        std::cout << "Maszyna " << station.id << " - poczatek: " << station.firstPosition
                   << ", koniec: " << station.lastPosition << std::endl;
     }
 }

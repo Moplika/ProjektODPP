@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     return app.exec();
 */
 
-        mojPrzykladTest();
+//        mojPrzykladTest();
     //    std::cout << "Sama sciezka krytyczna: " << std::endl;
     //    criticalPathTest();
     //    std::cout << "Wynik testu 20_5: " << test20_5() << std::endl;
@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
     //    flowProblem.printPreviousTasks();
 
 //    permutationSwapingTest();
-//        permutationSwapingTest15_2();
-    //      stationBoundriesTest();
+        permutationSwapingTest15_2();
+//          stationBoundriesTest();
 
 
 

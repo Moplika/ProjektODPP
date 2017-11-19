@@ -3,7 +3,13 @@
 
 #include <vector>
 #include "station.h"
+#include "machine.h"
 
+enum BlockPosition {
+    blockMiddle = 0,
+    blockStart = 1,
+    blockEnd = 2
+};
 
 class FlowProblem
 {
@@ -35,6 +41,7 @@ public:
     void printCriticalPath();
     void printBlockSplit();
     void printStationBoundries();
+    void printMachineBoundries();
     void printCurrentPermutation();
     void printPositionsInPermutation();
     void printPositionOnMachine();
@@ -54,22 +61,29 @@ private:
     void findCriticalPath();
     void splitIntoBlocks();
     void findStationBoundries();
+    void findMachineBoundries();
 
     void determinePositionInPermutationAndOnMachine();
 
     void swapElementPosition(int elementPosition, int finalPosition);
-    unsigned int findPositionInPermutation(unsigned int element);
+    int findPositionInPermutation(unsigned int element);
     Station findStation(unsigned int element);
+    Machine findMachine(unsigned int element);
 
     void recalculateTimes();
     void findBestPermutationForElement(unsigned int firstPosition,
                                        unsigned int lastPosition,
-                                       unsigned int elementPosition,
+                                       unsigned int &elementPosition,
                                        double &bestCMax,
                                        std::vector<unsigned int> &bestPermutation,
                                        int &counter);
-    void findBlockBoundries(std::vector<unsigned int>::iterator blockSplitIt,
-                            unsigned int &blockStart, unsigned int &blockStop);
+    void tryDifferentMachines(Machine machine, Station station,
+                              unsigned int &elementPosition,
+                              double &bestCMax,
+                              std::vector<unsigned int> &bestPermutation,
+                              int &counter);
+    void findBlockBoundries(std::vector<BlockPosition>::iterator blockSplitIt,
+                            int &blockStart, int &blockStop);
 
 
 
@@ -82,12 +96,14 @@ private:
     std::vector<unsigned int> technologicalPredecessor;
     std::vector<unsigned int> longerPredecessor;
     std::vector<Station> stationBoundries;
+    std::vector<Machine> machineBoundries;
 
     std::vector<double> totalTimes;
     std::vector<unsigned int> criticalPath;
-    std::vector<unsigned int> blockSplit;
+    std::vector<BlockPosition> blockSplit;
 
 };
+
 
 
 

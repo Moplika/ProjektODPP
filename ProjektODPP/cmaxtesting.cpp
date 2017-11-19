@@ -64,10 +64,47 @@ void permutationSwapingTest() {
 }
 
 void permutationSwapingTest15_2() {
+    // Default: 192 iteracji
+    // Oznaczenie początku: 181 iteracji
+    // Początek i koniec: 163 iteracje
+    // Wszystko: 122
+
     unsigned int permutationArray[] = {0,1,25,17,11,3,29,19,7, \
                                        0,13,5,23,27,15,21,9, \
-                                       0,2,6,24,28,4,20,22,10,\
-                                       0,14,26,18,12,16,30,8,0};
+                                       0,2,6,24,28,4,\
+                                       0,14,26,18,12,16,30,8,20,22,10,\
+                                       0};
+    std::vector<unsigned int> permutationVector(permutationArray,
+                                                permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
+
+    double timesArray[] = {0,5,3,4,4,4,4,3,4,5,3,2,3,3,6,6,2,5,2,5,5,8,7,3,4,3,2,5,4,3,4};
+    std::vector<double> times(timesArray,
+                              timesArray + sizeof(timesArray) / sizeof(double));
+
+    FlowProblem flowProblem(15, 2, 2);
+    flowProblem.setData(times, permutationVector);
+
+    flowProblem.printCurrentPermutation();
+    std::cout << "Poczatkowe cMax: " << flowProblem.getCMax() << std::endl;
+
+    flowProblem.printCriticalPath();
+    flowProblem.printBlockSplit();
+
+    std::cout << "Przestawianie: " << std::endl;
+    flowProblem.findBestPermutation();
+
+    std::cout << "Best permutation: " << std::endl;
+    flowProblem.printCurrentPermutation();
+    std::cout << "Cmax: " << flowProblem.getCMax() << std::endl;
+}
+
+void permutationSwapingTest15_22() {
+
+    unsigned int permutationArray[] = {0,1,25,17,11,3,29,7,19, \
+                                       0,13,5,23,27,15,21,9, \
+                                       0,2,6,24,28,4,\
+                                       0,14,26,18,12,16,30,8,20,22,10,\
+                                       0};
     std::vector<unsigned int> permutationVector(permutationArray,
                                                 permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
 
@@ -119,6 +156,7 @@ void stationBoundriesTest() {
 
     flowProblem.printCurrentPermutation();
     flowProblem.printStationBoundries();
+    flowProblem.printMachineBoundries();
 }
 
 bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
