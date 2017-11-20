@@ -75,13 +75,17 @@ private:
                                        unsigned int lastPosition,
                                        unsigned int &elementPosition,
                                        double &bestCMax,
-                                       std::vector<unsigned int> &bestPermutation,
+                                       unsigned int &bestElementPosition,
+                                       unsigned int &movedElement,
                                        int &counter);
     void tryDifferentMachines(Machine machine, Station station,
                               unsigned int &elementPosition,
                               double &bestCMax,
-                              std::vector<unsigned int> &bestPermutation,
+                              unsigned int &bestElementPosition,
+                              unsigned int &movedElement,
                               int &counter);
+    void setBestSolution(unsigned int movedElement, unsigned int newPosition);
+
     void findBlockBoundries(std::vector<BlockPosition>::iterator blockSplitIt,
                             int &blockStart, int &blockStop);
 

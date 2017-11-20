@@ -222,7 +222,8 @@ void FlowProblem::findBestPermutation() {
     auto originalPermutation = currentPermutation;
 
     double bestCMax = this->getCMax();
-    auto bestPermutation = currentPermutation;
+    unsigned int movedElementPosition = 0;
+    unsigned int bestElementPosition = 0;
 
     auto blockSplitIt = blockSplit.begin();
 
@@ -240,17 +241,16 @@ void FlowProblem::findBestPermutation() {
         unsigned int lastPosition = 0;
 
         switch (blockSign) {
-        //TODO: Dodać przenoszenie na inną maszynę
         case BlockPosition::blockStart:
             // Przenoszenie przed blok na maszynie
             firstPosition = machine.firstPosition;
             lastPosition = elementPosition - 1;
 
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-                                                bestCMax, bestPermutation, tempCnt);
+                                                bestCMax, bestElementPosition, movedElementPosition, tempCnt);
 
             // Inne maszyny
-            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestPermutation, tempCnt);
+            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestElementPosition, movedElementPosition, tempCnt);
 
             break;
         case BlockPosition::blockEnd:
@@ -258,10 +258,11 @@ void FlowProblem::findBestPermutation() {
             firstPosition = elementPosition + 1;
             lastPosition = machine.lastPosition;
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-                                                bestCMax, bestPermutation, tempCnt);
+                                                bestCMax, bestElementPosition, movedElementPosition, tempCnt);
 
             // Inne maszyny
-            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestPermutation, tempCnt);
+            this->tryDifferentMachines(machine, station, elementPosition, bestCMax,
+                                       bestElementPosition, movedElementPosition, tempCnt);
 
             break;
 
@@ -276,17 +277,18 @@ void FlowProblem::findBestPermutation() {
             lastPosition = std::max(firstInBlock, machine.firstPosition);
 
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-                                                bestCMax, bestPermutation, tempCnt);
+                                                bestCMax, bestElementPosition, movedElementPosition, tempCnt);
 
             // Ta sama maszyna, za blokiem
             firstPosition = std::min(lastInBlock + 1, machine.lastPosition);
             lastPosition = machine.lastPosition;
 
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-                                                bestCMax, bestPermutation, tempCnt);
+                                                bestCMax, bestElementPosition, movedElementPosition, tempCnt);
 
             // Inne maszyny
-            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestPermutation, tempCnt);
+            this->tryDifferentMachines(machine, station, elementPosition, bestCMax,
+                                       bestElementPosition, movedElementPosition, tempCnt);
 
             break;
         default:
@@ -294,44 +296,47 @@ void FlowProblem::findBestPermutation() {
             lastPosition = station.lastPosition;
 
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-                                                bestCMax, bestPermutation, tempCnt);
+                                                bestCMax, bestElementPosition, movedElementPosition, tempCnt);
         }
         currentPermutation = originalPermutation;
         blockSplitIt++;
     }
-    currentPermutation = bestPermutation;
-    this->recalculateTimes();
+    this->setBestSolution(movedElementPosition, bestElementPosition);
+//    this->recalculateTimes();
 
     std::cout << "Wykonano " << tempCnt << " iteracji" << std::endl;
 }
 
 void FlowProblem::tryDifferentMachines(Machine machine, Station station, unsigned int &elementPosition,
-                                       double &bestCMax, std::vector<unsigned int> &bestPermutation,
-                                       int &counter) {
+                                       double &bestCMax, unsigned int &bestElementPosition,
+                                       unsigned int &movedElement, int &counter) {
     // Przenoszenie na inną maszynę - wcześniejsze maszyny
     unsigned int firstPosition = station.firstPosition;
     unsigned int lastPosition = machine.firstPosition - 1;
 
     this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-                                        bestCMax, bestPermutation, counter);
+                                        bestCMax, bestElementPosition, movedElement, counter);
 
     // Przenoszenie na inną maszynę - następne maszyny
     firstPosition = machine.lastPosition + 1;
     lastPosition = station.lastPosition;
 
     this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
-                                        bestCMax, bestPermutation, counter);
+                                        bestCMax, bestElementPosition, movedElement, counter);
 }
 
 void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
                                                 unsigned int lastPosition,
                                                 unsigned int &elementPosition,
                                                 double &bestCMax,
-                                                std::vector<unsigned int> &bestPermutation,
+                                                unsigned int &bestElementPosition,
+                                                unsigned int &movedElement,
                                                 int &counter) {
     if (elementPosition == lastPosition || firstPosition > lastPosition) {
         return;
     }
+
+//    unsigned int originalPosition = elementPosition;
 
     for (unsigned int position = firstPosition;
          position <= lastPosition; position++) {
@@ -340,7 +345,9 @@ void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
 
         if (this->getCMax() < bestCMax) {
             bestCMax = this->getCMax();
-            bestPermutation = currentPermutation;
+            bestElementPosition = position;
+            movedElement = currentPermutation.at(position);
+            //            bestPermutation = currentPermutation;
         }
         elementPosition = position;
 
@@ -349,6 +356,13 @@ void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
         std::cout << "Cmax: " << this->getCMax() << std::endl;
         counter++;
     }
+}
+
+void FlowProblem::setBestSolution(unsigned int movedElement, unsigned int newPosition) {
+    unsigned int movedElementPosition = this->findPositionInPermutation(movedElement);
+
+    this->swapElementPosition(movedElementPosition, newPosition);
+    this->recalculateTimes();
 }
 
 int FlowProblem::findPositionInPermutation(unsigned int element) {
