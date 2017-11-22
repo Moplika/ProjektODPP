@@ -42,11 +42,15 @@ FlowProblem readFlowProblem(std::string filename) {
 //        std::cout << *it << " ";
 //    }
 //    std::cout << std::endl;
+    unsigned int taskNumber;
 
-    for (unsigned int i = 0; i < taskCount*stationCount + stationCount * machineCount + 1; i++) {
-        unsigned int taskNumber;
+    for (unsigned int i = 0; i < taskCount*stationCount + stationCount * machineCount + 1; i++) {     
         inputStream >> taskNumber;
         permutation.push_back(taskNumber);
+    }
+
+    if (taskNumber != 0) {
+        permutation.push_back(0);
     }
 
 //    // Debug

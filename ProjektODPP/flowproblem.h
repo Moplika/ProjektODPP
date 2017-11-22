@@ -2,8 +2,11 @@
 #define FLOWPROBLEM_H
 
 #include <vector>
+#include <queue>
+#include <list>
 #include "station.h"
 #include "machine.h"
+#include "tabulistelement.h"
 
 enum BlockPosition {
     blockMiddle = 0,
@@ -45,6 +48,7 @@ public:
     void printCurrentPermutation();
     void printPositionsInPermutation();
     void printPositionOnMachine();
+    void printTabuList();
 
     void setCriticalPath(std::vector<unsigned int> criticalPath);
 
@@ -53,6 +57,8 @@ private:
     unsigned int taskCount; // n
     unsigned int stationCount; // s
     unsigned int machinesPerStation; // k
+
+    unsigned int tabuListMaxLength;
 
     //    Permutation currentPermutation;
 
@@ -88,7 +94,7 @@ private:
 
     void findBlockBoundries(std::vector<BlockPosition>::iterator blockSplitIt,
                             int &blockStart, int &blockStop);
-
+    void addTabuListElement(TabuListElement element);
 
 
     std::vector<unsigned int> currentPermutation;
@@ -105,6 +111,8 @@ private:
     std::vector<double> totalTimes;
     std::vector<unsigned int> criticalPath;
     std::vector<BlockPosition> blockSplit;
+
+    std::list<TabuListElement> tabuList;
 
 };
 

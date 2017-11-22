@@ -46,7 +46,11 @@ int main(int argc, char *argv[])
     //    flowProblem.printPreviousTasks();
 
 //    permutationSwapingTest();
-        permutationSwapingTest15_2();
+//        permutationSwapingTest15_2();
+//    permutationSwapAllFiles();
+
+//        tabuListTest();
+    tabuListTest(5000,"C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex100_10.txt");
 //          stationBoundriesTest();
 
 

@@ -36,4 +36,5 @@ HEADERS += \
     cmaxtesting.h \
     flowproblemdatareader.h \
     station.h \
-    machine.h
+    machine.h \
+    tabulistelement.h

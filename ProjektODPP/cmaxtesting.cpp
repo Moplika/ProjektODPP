@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 void mojPrzykladTest() {
     FlowProblem flowProblem(4, 2, 2);
@@ -129,6 +130,35 @@ void permutationSwapingTest15_22() {
     std::cout << "Cmax: " << flowProblem.getCMax() << std::endl;
 }
 
+void permutationSwapingTest(std::string filename) {
+    FlowProblem flowProblem = readFlowProblem(filename);
+
+//    std::vector<unsigned int> testPermutation(permutation, permutation + sizeof(permutation) / sizeof(unsigned int));
+//    std::vector<double> testTimes(times, times + (n*s+1) );
+
+//    flowProblem.setData(testTimes, testPermutation);
+
+    std::cout << "Początkowe cMax: " << flowProblem.getCMax() << std::endl;
+
+    flowProblem.printCriticalPath();
+
+    flowProblem.findBestPermutation();
+    std::cout << "Nowa permutacja: " << std::endl;
+    flowProblem.printCurrentPermutation();
+    std::cout << "Cmax: " << flowProblem.getCMax() << std::endl;
+}
+
+void permutationSwapAllFiles() {
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_10.txt");
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_20.txt");
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex50_5.txt");
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex50_10.txt");
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex50_20.txt");
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex100_5.txt");
+    permutationSwapingTest("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex100_10.txt");
+}
+
 void criticalPathTest() {
     FlowProblem flowProblem;
 
@@ -140,6 +170,72 @@ void criticalPathTest() {
     flowProblem.printBlockSplit();
 }
 
+void tabuListTest() {
+    unsigned int permutationArray[] = {0,1,25,17,11,3,29,19,7, \
+                                       0,13,5,23,27,15,21,9, \
+                                       0,2,6,24,28,4,\
+                                       0,14,26,18,12,16,30,8,20,22,10,\
+                                       0};
+    std::vector<unsigned int> permutationVector(permutationArray,
+                                                permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
+
+    double timesArray[] = {0,5,3,4,4,4,4,3,4,5,3,2,3,3,6,6,2,5,2,5,5,8,7,3,4,3,2,5,4,3,4};
+    std::vector<double> times(timesArray,
+                              timesArray + sizeof(timesArray) / sizeof(double));
+
+    FlowProblem flowProblem(15, 2, 2);
+    flowProblem.setData(times, permutationVector);
+
+    flowProblem.printCurrentPermutation();
+    std::cout << "Poczatkowe cMax: " << flowProblem.getCMax() << std::endl;
+
+    for (int i = 0; i < 20; i++) {
+        std::cout << "------------------------------------" << std::endl;
+        std::cout << "Iteracja " << i << ": " << std::endl;
+
+        flowProblem.findBestPermutation();
+        std::cout << "cMax: " << flowProblem.getCMax() << std::endl;
+        flowProblem.printCurrentPermutation();
+
+        flowProblem.printTabuList();
+    }
+
+    std::cout << "------------------------------------" << std::endl;
+    std::cout << "Orzymany wynik: " << std::endl;
+    flowProblem.printCurrentPermutation();
+    std::cout << "cMax: " << flowProblem.getCMax() << std::endl;
+
+
+}
+
+void tabuListTest(int iterationNb, std::string filename) {
+    FlowProblem flowProblem = readFlowProblem(filename);
+
+    double firstCmax = flowProblem.getCMax();
+
+    std::cout << "Początkowe cMax: " << firstCmax << std::endl;
+
+    flowProblem.printCriticalPath();
+
+    for (int i = 0; i < iterationNb; i++) {
+//        std::cout << "------------------------------------" << std::endl;
+//        std::cout << "Iteracja " << i << ": " << std::endl;
+
+        flowProblem.findBestPermutation();
+//        std::cout << "cMax: " << flowProblem.getCMax() << std::endl;
+//        flowProblem.printCurrentPermutation();
+
+//        flowProblem.printTabuList();
+    }
+
+    std::cout << "------------------------------------" << std::endl;
+    std::cout << "Orzymany wynik: " << std::endl;
+    flowProblem.printCurrentPermutation();
+//    std::cout << "cMax: " << flowProblem.getCMax() << std::endl;
+    std::cout << "Poczatkowe cMax: " << firstCmax << std::endl;
+    std::cout << "Po " << iterationNb << " iteracjach otrzymano cMax: "
+              << flowProblem.getCMax() << std::endl;
+}
 
 void stationBoundriesTest() {
     FlowProblem  flowProblem(4, 2, 2);

@@ -3,6 +3,9 @@
 #include <iostream>
 #include <algorithm>
 
+// TODO: Naprawić podział na stacje/maszyny, jeśli permutacja nie kończy się na 0
+// Może przy wczytywaniu danych?
+
 FlowProblem::FlowProblem()
 {
 
@@ -167,6 +170,8 @@ void FlowProblem::calculateTotalTimes() {
 }
 
 void FlowProblem::findCriticalPath() {
+    criticalPath.clear();
+
     unsigned int previousElement = this->getCMaxPosition();
 
     while (previousElement != 0) {
@@ -230,7 +235,7 @@ void FlowProblem::findBestPermutation() {
     for (auto critPathElement : criticalPath) {
 
         // Debug
-        std::cout << "Przestawiamy " << critPathElement << std::endl;
+//        std::cout << "Przestawiamy " << critPathElement << std::endl;
 
         unsigned int elementPosition = this->findPositionInPermutation(critPathElement);
         Station station = this->findStation(critPathElement);
@@ -250,20 +255,19 @@ void FlowProblem::findBestPermutation() {
                                                 bestCMax, bestElementPosition, movedElementPosition, tempCnt);
 
             // Inne maszyny
-            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestElementPosition, movedElementPosition, tempCnt);
-
+            this->tryDifferentMachines(machine, station, elementPosition, bestCMax, bestElementPosition,
+                                       movedElementPosition, tempCnt);
             break;
+
         case BlockPosition::blockEnd:
             // Przenoszenie za blok na maszynie
             firstPosition = elementPosition + 1;
             lastPosition = machine.lastPosition;
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
                                                 bestCMax, bestElementPosition, movedElementPosition, tempCnt);
-
             // Inne maszyny
             this->tryDifferentMachines(machine, station, elementPosition, bestCMax,
                                        bestElementPosition, movedElementPosition, tempCnt);
-
             break;
 
         case BlockPosition::blockMiddle:
@@ -278,19 +282,17 @@ void FlowProblem::findBestPermutation() {
 
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
                                                 bestCMax, bestElementPosition, movedElementPosition, tempCnt);
-
             // Ta sama maszyna, za blokiem
             firstPosition = std::min(lastInBlock + 1, machine.lastPosition);
             lastPosition = machine.lastPosition;
 
             this->findBestPermutationForElement(firstPosition, lastPosition, elementPosition,
                                                 bestCMax, bestElementPosition, movedElementPosition, tempCnt);
-
             // Inne maszyny
             this->tryDifferentMachines(machine, station, elementPosition, bestCMax,
                                        bestElementPosition, movedElementPosition, tempCnt);
-
             break;
+
         default:
             firstPosition = station.firstPosition;
             lastPosition = station.lastPosition;
@@ -302,9 +304,9 @@ void FlowProblem::findBestPermutation() {
         blockSplitIt++;
     }
     this->setBestSolution(movedElementPosition, bestElementPosition);
-//    this->recalculateTimes();
 
-    std::cout << "Wykonano " << tempCnt << " iteracji" << std::endl;
+    std::cout << "Wykonano " << tempCnt << " iteracji dla sciezki krytycznej o "
+              << criticalPath.size() << " elementach"<< std::endl;
 }
 
 void FlowProblem::tryDifferentMachines(Machine machine, Station station, unsigned int &elementPosition,
@@ -334,10 +336,8 @@ void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
                                                 int &counter) {
     if (elementPosition == lastPosition || firstPosition > lastPosition) {
         return;
+
     }
-
-//    unsigned int originalPosition = elementPosition;
-
     for (unsigned int position = firstPosition;
          position <= lastPosition; position++) {
         this->swapElementPosition(elementPosition, position);
@@ -347,20 +347,56 @@ void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
             bestCMax = this->getCMax();
             bestElementPosition = position;
             movedElement = currentPermutation.at(position);
-            //            bestPermutation = currentPermutation;
         }
         elementPosition = position;
 
-        //Debug
-        this->printCurrentPermutation();
-        std::cout << "Cmax: " << this->getCMax() << std::endl;
+//        //Debug
+//        this->printCurrentPermutation();
+//        std::cout << "Cmax: " << this->getCMax() << std::endl;
         counter++;
     }
 }
 
 void FlowProblem::setBestSolution(unsigned int movedElement, unsigned int newPosition) {
+    if (movedElement == 0) {
+        this->recalculateTimes();
+        return;
+    }
+
+    // Dodanie nowych ograniczeń
+    unsigned int previousMachine = this->findMachine(movedElement).id;
+    unsigned int elementOnNewPosition = currentPermutation.at(newPosition);
+
+    unsigned int newMachine;
+    if (elementOnNewPosition == 0) {
+        // Potrzebujemy dostać maszynę, za którą wstawiamy, więc jeśli wstawiamy za 0, to musimy tutaj
+        // wziąć następny element z permutacji (maszyna dla 0 jest nieokreślona)
+        unsigned int nextElementOnMachine = currentPermutation.at(newPosition+1);
+        newMachine = this->findMachine(nextElementOnMachine).id;
+    } else {
+        newMachine = this->findMachine(elementOnNewPosition).id;
+    }
+
     unsigned int movedElementPosition = this->findPositionInPermutation(movedElement);
 
+    unsigned int previousElement = currentPermutation.at(movedElementPosition - 1);
+    unsigned int nextElement = currentPermutation.at(movedElementPosition + 1);
+
+    if (previousMachine == newMachine) { // Przenoszenie wewnątrz jednej maszyny
+        if (movedElementPosition < newPosition) { // Przenoszenie przed blok
+            TabuListElement newElement (previousMachine, movedElement, nextElement);
+            this->addTabuListElement(newElement);
+        } else if (movedElementPosition > newPosition) { // Przenoszenie za blok
+            TabuListElement newElement (previousMachine, previousElement, movedElement);
+            this->addTabuListElement(newElement);
+        }
+    } else { // Przenoszenie na inną maszynę
+        TabuListElement newElement (previousMachine, previousElement, movedElement);
+        this->addTabuListElement(newElement);
+        newElement = TabuListElement(previousMachine, movedElement, nextElement);
+        this->addTabuListElement(newElement);
+    }
+    // Przeniesienie elementu
     this->swapElementPosition(movedElementPosition, newPosition);
     this->recalculateTimes();
 }
@@ -393,7 +429,6 @@ void FlowProblem::findBlockBoundries(std::vector<BlockPosition>::iterator blockS
     unsigned int index = elementIndex;
     for (auto it = blockSplitIt; it != blockSplit.end(); it++, index++) {
         if (*it == 2) {
-            //blockStop = index;
             blockStop = this->findPositionInPermutation(criticalPath.at(index));
             break;
         }
@@ -402,7 +437,6 @@ void FlowProblem::findBlockBoundries(std::vector<BlockPosition>::iterator blockS
     index = elementIndex;
     for (auto it = blockSplitIt; it != blockSplit.begin()-1; it--, index--) {
         if (*it == 1) {
-            //blockStart = index;
             blockStart = this->findPositionInPermutation(criticalPath.at(index));
             break;
         }
@@ -438,6 +472,13 @@ void FlowProblem::determinePositionInPermutationAndOnMachine() {
     }
 }
 
+void FlowProblem::addTabuListElement(TabuListElement element) {
+    tabuList.push_back(element);
+
+    while (tabuList.size() > tabuListMaxLength) {
+        tabuList.pop_front();
+    }
+}
 
 
 void FlowProblem::printPreviousTasks() {
@@ -523,4 +564,13 @@ void FlowProblem::printPositionOnMachine() {
         i++;
     }
     std::cout << std::endl;
+}
+
+void FlowProblem::printTabuList() {
+    std::cout << "Tabu list: " << std::endl;
+
+    for (auto element : tabuList) {
+        std::cout << "Maszyna: " << element.machineId << ", pierwsze: " << element.frontElement
+                  << ", drugie: " << element.backElement << std::endl;
+    }
 }

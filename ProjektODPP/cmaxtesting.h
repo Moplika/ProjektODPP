@@ -2,6 +2,7 @@
 #define CMAXTESTING_H
 
 #include <vector>
+#include <string>
 
 bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
               double times[], unsigned int permutation[],
@@ -17,6 +18,11 @@ void stationBoundriesTest();
 void permutationSwapingTest15_2();
 void permutationSwapingTest15_22();
 
+void permutationSwapingTest(std::string filename);
+void permutationSwapAllFiles();
+
+void tabuListTest();
+void tabuListTest(int iterationNb, std::string filename);
 
 bool test20_5();
 bool test20_10();
