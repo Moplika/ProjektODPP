@@ -24,6 +24,10 @@ void FlowProblem::setData(std::vector<double> times,
     currentPermutation = firstPermutation;
     taskTimes = times;
 
+    if (currentPermutation.back() != 0) {
+        currentPermutation.push_back(0);
+    }
+
     this->findStationBoundries();
 
     this->recalculateTimes();

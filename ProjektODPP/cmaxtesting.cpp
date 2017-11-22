@@ -133,11 +133,6 @@ void permutationSwapingTest15_22() {
 void permutationSwapingTest(std::string filename) {
     FlowProblem flowProblem = readFlowProblem(filename);
 
-//    std::vector<unsigned int> testPermutation(permutation, permutation + sizeof(permutation) / sizeof(unsigned int));
-//    std::vector<double> testTimes(times, times + (n*s+1) );
-
-//    flowProblem.setData(testTimes, testPermutation);
-
     std::cout << "Początkowe cMax: " << flowProblem.getCMax() << std::endl;
 
     flowProblem.printCriticalPath();
@@ -175,7 +170,7 @@ void tabuListTest() {
                                        0,13,5,23,27,15,21,9, \
                                        0,2,6,24,28,4,\
                                        0,14,26,18,12,16,30,8,20,22,10,\
-                                       0};
+                                       };
     std::vector<unsigned int> permutationVector(permutationArray,
                                                 permutationArray + sizeof(permutationArray) / sizeof(unsigned int));
 
