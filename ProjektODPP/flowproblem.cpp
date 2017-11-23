@@ -3,9 +3,6 @@
 #include <iostream>
 #include <algorithm>
 
-// TODO: Naprawić podział na stacje/maszyny, jeśli permutacja nie kończy się na 0
-// Może przy wczytywaniu danych?
-
 FlowProblem::FlowProblem()
 {
 
@@ -24,7 +21,7 @@ void FlowProblem::setData(std::vector<double> times,
     currentPermutation = firstPermutation;
     taskTimes = times;
 
-    tabuListMaxLength = 20;
+//    tabuListMaxLength = 20;
 
     if (currentPermutation.back() != 0) {
         currentPermutation.push_back(0);
@@ -545,6 +542,28 @@ bool FlowProblem::doesFulfillRequirements(unsigned int elementPosition, unsigned
 
     }
     return true;
+}
+
+double FlowProblem::doTabuSearch(unsigned int iterationNb, unsigned int tabuListLength) {
+    double bestCMax = this->getCMax();
+    auto bestPermutation = currentPermutation;
+
+    tabuListMaxLength = tabuListLength;
+
+    for (int i = 0; i < iterationNb; i++) {
+        this->findBestPermutation();
+
+        if (this->getCMax() < bestCMax) {
+            bestCMax = this->getCMax();
+            bestPermutation = currentPermutation;
+        }
+    }
+
+    return bestCMax;
+}
+
+void FlowProblem::setTabuListMaxLength(unsigned int length) {
+    tabuListMaxLength = length;
 }
 
 

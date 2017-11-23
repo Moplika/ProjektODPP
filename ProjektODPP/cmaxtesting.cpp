@@ -203,8 +203,9 @@ void tabuListTest() {
 
 }
 
-void tabuListTest(int iterationNb, std::string filename) {
+void tabuListTest(unsigned int iterationNb, unsigned int maxListLength, std::string filename) {
     FlowProblem flowProblem = readFlowProblem(filename);
+    flowProblem.setTabuListMaxLength(maxListLength);
 
     double firstCmax = flowProblem.getCMax();
 
@@ -241,6 +242,8 @@ void tabuListTest(int iterationNb, std::string filename) {
     }
     std::cout << std::endl;
 
+    double minCmax = *(std::min_element(cMaxs.begin(), cMaxs.end()));
+
 
     std::cout << "------------------------------------" << std::endl;
     std::cout << "Orzymany wynik: " << std::endl;
@@ -249,6 +252,7 @@ void tabuListTest(int iterationNb, std::string filename) {
     std::cout << "Poczatkowe cMax: " << firstCmax << std::endl;
     std::cout << "Po " << iterationNb << " iteracjach otrzymano cMax: "
               << flowProblem.getCMax() << std::endl;
+    std::cout << "Najlepsze otrzymane cMax: " << minCmax << std::endl;
 }
 
 void stationBoundriesTest() {

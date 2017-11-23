@@ -22,7 +22,7 @@ void permutationSwapingTest(std::string filename);
 void permutationSwapAllFiles();
 
 void tabuListTest();
-void tabuListTest(int iterationNb, std::string filename);
+void tabuListTest(unsigned int iterationNb, unsigned int maxListLength, std::string filename);
 
 bool test20_5();
 bool test20_10();

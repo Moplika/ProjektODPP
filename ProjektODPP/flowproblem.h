@@ -35,8 +35,12 @@ public:
     double getCMax();
     unsigned int getCMaxPosition();
 
+    void setTabuListMaxLength(unsigned int length);
+
     void findBestPermutation();
     void insertBehind(int elementPosition, int finalPosition);
+
+    double doTabuSearch(unsigned int iterationNb, unsigned int tabuListLength);
 
     // debug
     void printPreviousTasks();
