@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
 //    permutationSwapAllFiles();
 
 //        tabuListTest();
-    tabuListTest(1000,"C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex50_10.txt");
+    tabuListTest(10000,"C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
 //          stationBoundriesTest();
 
 

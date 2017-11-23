@@ -24,12 +24,13 @@ void FlowProblem::setData(std::vector<double> times,
     currentPermutation = firstPermutation;
     taskTimes = times;
 
+    tabuListMaxLength = 20;
+
     if (currentPermutation.back() != 0) {
         currentPermutation.push_back(0);
     }
 
     this->findStationBoundries();
-
     this->recalculateTimes();
 }
 
@@ -230,7 +231,8 @@ void FlowProblem::findBestPermutation() {
 
     auto originalPermutation = currentPermutation;
 
-    double bestCMax = this->getCMax();
+//    double bestCMax = this->getCMax();
+    double bestCMax = INT_MAX;
     unsigned int movedElementPosition = 0;
     unsigned int bestElementPosition = 0;
 
@@ -309,8 +311,8 @@ void FlowProblem::findBestPermutation() {
     }
     this->setBestSolution(movedElementPosition, bestElementPosition);
 
-    std::cout << "Wykonano " << tempCnt << " iteracji dla sciezki krytycznej o "
-              << criticalPath.size() << " elementach"<< std::endl;
+//    std::cout << "Wykonano " << tempCnt << " iteracji dla sciezki krytycznej o "
+//              << criticalPath.size() << " elementach"<< std::endl;
 }
 
 void FlowProblem::tryDifferentMachines(Machine machine, Station station, unsigned int &elementPosition,
@@ -356,9 +358,6 @@ void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
             }
             elementPosition = position;
         }
-
-
-
         //Debug
         //        this->printCurrentPermutation();
         //        std::cout << "Cmax: " << this->getCMax() << std::endl;
@@ -369,6 +368,7 @@ void FlowProblem::findBestPermutationForElement(unsigned int firstPosition,
 
 void FlowProblem::setBestSolution(unsigned int movedElement, unsigned int newPosition) {
     if (movedElement == 0) {
+        std::cout << "Nie znaleziono lepszego rozwiązania :(" << std::endl;
         this->recalculateTimes();
         return;
     }
@@ -493,59 +493,56 @@ void FlowProblem::addTabuListElement(TabuListElement element) {
     }
 }
 
-bool FlowProblem::doesFulfillRequirements(unsigned int elementPosition, unsigned int newPosition) {
-//        return true;
+bool FlowProblem::doesFulfillRequirements(unsigned int elementPosition, unsigned int newPosition) {   
+//    return true;
 
-    unsigned int element = currentPermutation.at(elementPosition);
+    unsigned int elementToMove = currentPermutation.at(elementPosition);
+    unsigned int elementOnNewPosition = currentPermutation.at(newPosition);
 
-
-    unsigned int newElementMachine;
-
-    if (currentPermutation.at(newPosition) == 0) {
-        newElementMachine = this->findMachine(currentPermutation.at(newPosition + 1)).id;
+    unsigned int newMachine;
+    if (elementOnNewPosition == 0) {
+        newMachine = this->findMachine(currentPermutation.at(newPosition + 1)).id;
     } else {
-        newElementMachine = this->findMachine(currentPermutation.at(newPosition)).id;
+        newMachine = this->findMachine(elementOnNewPosition).id;
     }
 
     for (auto tabuElement : tabuList) {
-        unsigned int frontElementMachine = this->findMachine(tabuElement.frontElement).id;
-        unsigned int backElementMachine = this->findMachine(tabuElement.backElement).id;
+        if (newMachine != tabuElement.machineId) {
+            // Jesteśmy na innej maszynie, nie ma po co sprawdzać (na pewno?)
+            continue;
+        }
 
-        if (element == tabuElement.frontElement) {
-            if (newElementMachine == backElementMachine) {
-                unsigned int backElementPosition = this->findPositionInPermutation(tabuElement.backElement);
-                if (newPosition > backElementPosition) {
-                    //Debug
-//                    std::cout << "Niespelnione ograniczenie! Na maszynie " << tabuElement.machineId << " element "
-//                              << tabuElement.frontElement << " powinien byc przed " << tabuElement.backElement << std::endl;
-
-                    return false;
-                }
-            }
-        } else if (element == tabuElement.backElement) {
-            if (newElementMachine == backElementMachine) {
-                unsigned int frontElementPosition = this->findPositionInPermutation(tabuElement.frontElement);
-                if (frontElementPosition > newPosition) {
-                    //Debug
-//                    std::cout << "Niespelnione ograniczenie! Na maszynie " << tabuElement.machineId << " element "
-//                              << tabuElement.frontElement << " powinien byc przed " << tabuElement.backElement << std::endl;
-
-                    return false;
-                }
-            }
-
-        } else if (frontElementMachine == backElementMachine) {
-            unsigned int frontElementPosition = this->findPositionInPermutation(tabuElement.frontElement);
+        if (elementToMove == tabuElement.frontElement) {
+            unsigned int backElementMachine = this->findMachine(tabuElement.backElement).id;
             unsigned int backElementPosition = this->findPositionInPermutation(tabuElement.backElement);
 
-            if (frontElementPosition > backElementPosition) {
-                //Debug
+            if (elementPosition < backElementPosition && backElementMachine == newMachine) {
 //                std::cout << "Niespelnione ograniczenie! Na maszynie " << tabuElement.machineId << " element "
 //                          << tabuElement.frontElement << " powinien byc przed " << tabuElement.backElement << std::endl;
+                return false;
+            }
+        } else if (elementToMove == tabuElement.backElement) {
+            unsigned int frontElementMachine = this->findMachine(tabuElement.frontElement).id;
+            unsigned int frontElementPosition = this->findPositionInPermutation(tabuElement.frontElement);
 
+            if (frontElementPosition < elementPosition && frontElementMachine == newMachine) {
+//                std::cout << "Niespelnione ograniczenie! Na maszynie " << tabuElement.machineId << " element "
+//                          << tabuElement.frontElement << " powinien byc przed " << tabuElement.backElement << std::endl;
+                return false;
+            }
+        } else {
+            unsigned int backElementPosition = this->findPositionInPermutation(tabuElement.backElement);
+            unsigned int frontElementPosition = this->findPositionInPermutation(tabuElement.frontElement);
+            unsigned int backElementMachine = this->findMachine(tabuElement.backElement).id;
+            unsigned int frontElementMachine = this->findMachine(tabuElement.frontElement).id;
+
+            if (frontElementPosition < backElementPosition && backElementMachine == frontElementMachine) {
+//                std::cout << "Niespelnione ograniczenie! Na maszynie " << tabuElement.machineId << " element "
+//                          << tabuElement.frontElement << " powinien byc przed " << tabuElement.backElement << std::endl;
                 return false;
             }
         }
+
     }
     return true;
 }

@@ -212,6 +212,8 @@ void tabuListTest(int iterationNb, std::string filename) {
 
     flowProblem.printCriticalPath();
 
+    std::vector<double> cMaxs;
+
     for (int i = 0; i < iterationNb; i++) {
 //        std::cout << "------------------------------------" << std::endl;
 //        std::cout << "Iteracja " << i << ": " << std::endl;
@@ -221,9 +223,24 @@ void tabuListTest(int iterationNb, std::string filename) {
 //        flowProblem.printCurrentPermutation();
 
 //        flowProblem.printTabuList();
+        cMaxs.push_back(flowProblem.getCMax());
     }
 
     flowProblem.printTabuList();
+    std::cout << "------------------------------------" << std::endl;
+    std::cout << "cMax otrzymane w kolejnych iteracjach: " << std::endl;
+
+    int i = 1;
+    for (auto element : cMaxs) {
+        std::cout << element << "   ";
+
+        if (i % 20 == 0) {
+            std::cout << std::endl;
+        }
+        i++;
+    }
+    std::cout << std::endl;
+
 
     std::cout << "------------------------------------" << std::endl;
     std::cout << "Orzymany wynik: " << std::endl;
