@@ -96,6 +96,7 @@ private:
                             int &blockStart, int &blockStop);
     void addTabuListElement(TabuListElement element);
 
+    bool doesFulfillRequirements(unsigned int elementPosition, unsigned int finalPosition);
 
     std::vector<unsigned int> currentPermutation;
     std::vector<unsigned int> positionInPermutation;

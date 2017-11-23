@@ -223,6 +223,8 @@ void tabuListTest(int iterationNb, std::string filename) {
 //        flowProblem.printTabuList();
     }
 
+    flowProblem.printTabuList();
+
     std::cout << "------------------------------------" << std::endl;
     std::cout << "Orzymany wynik: " << std::endl;
     flowProblem.printCurrentPermutation();
