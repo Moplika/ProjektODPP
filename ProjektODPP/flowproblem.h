@@ -19,6 +19,8 @@ class FlowProblem
 public:
     FlowProblem();
     FlowProblem(int taskC, int stationC, int machineC);
+    FlowProblem(int taskC, int stationC, int machineC,
+                std::vector<double> times);
 
     void setData(std::vector<double> times,
                  std::vector<unsigned int> firstPermutation);
@@ -31,7 +33,8 @@ public:
 
     std::vector<Station> getStationBoundries();
 
-    std::vector<double> getTotalTimes();
+    std::vector<double> getFinishTimes();
+    std::vector<double> getStartTimes();
     double getCMax();
     unsigned int getCMaxPosition();
 
@@ -74,6 +77,7 @@ private:
     void findMachineBoundries();
 
     void determinePositionInPermutationAndOnMachine();
+    std::vector<unsigned int> constructFirstPermutation();
 
     void swapElementPosition(int elementPosition, int finalPosition);
     int findPositionInPermutation(unsigned int element);
@@ -113,7 +117,8 @@ private:
     std::vector<Station> stationBoundries;
     std::vector<Machine> machineBoundries;
 
-    std::vector<double> totalTimes;
+    std::vector<double> finishTimes;
+    std::vector<double> startTimes;
     std::vector<unsigned int> criticalPath;
     std::vector<BlockPosition> blockSplit;
 

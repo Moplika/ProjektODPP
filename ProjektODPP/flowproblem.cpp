@@ -5,6 +5,9 @@
 
 FlowProblem::FlowProblem()
 {
+    taskCount = 0;
+    stationCount = 0;
+    machinesPerStation = 0;
 
 }
 
@@ -14,6 +17,17 @@ FlowProblem::FlowProblem(int taskC, int stationC, int machineC) {
     machinesPerStation = machineC;
 
     this->findTechnologicalPredecessors();
+}
+
+FlowProblem::FlowProblem(int taskC, int stationC, int machineC,
+                         std::vector<double> times) {
+    taskCount = taskC;
+    stationCount = stationC;
+    machinesPerStation = machineC;
+
+    std::vector<unsigned int> firstPermutation = this->constructFirstPermutation();
+    this->findTechnologicalPredecessors();
+    this->setData(times, firstPermutation);
 }
 
 void FlowProblem::setData(std::vector<double> times,
@@ -29,6 +43,28 @@ void FlowProblem::setData(std::vector<double> times,
 
     this->findStationBoundries();
     this->recalculateTimes();
+}
+
+std::vector<unsigned int> FlowProblem::constructFirstPermutation() {
+    unsigned int totalOperationCount = this->getOperationsCount();
+    std::vector<unsigned int> newPermutation;
+
+    for (unsigned int s = 1; s <= stationCount; s++) {
+        for (unsigned int m = 1; m <= machinesPerStation; m++) {
+            newPermutation.push_back(0);
+            // Indeks pierwszego elementu na maszynie
+            // Dla 5 stanowisk i 3 maszyn: na stan. 1 maszyna 1 zaczyna od 1,
+            // maszyna 2 od 6, maszyna 3 od 11 itp
+            unsigned int operationId = s + (m-1)*stationCount;
+
+            for (; operationId <= totalOperationCount;
+                 operationId += machinesPerStation * stationCount) {
+                newPermutation.push_back(operationId);
+            }
+        }
+    }
+
+    return newPermutation;
 }
 
 unsigned int FlowProblem::getTaskCount() {
@@ -51,22 +87,26 @@ unsigned int FlowProblem::getTotalMachineCount() {
     return stationCount * machinesPerStation;
 }
 
-std::vector<double> FlowProblem::getTotalTimes() {
-    return totalTimes;
+std::vector<double> FlowProblem::getFinishTimes() {
+    return finishTimes;
 }
 
 std::vector<Station> FlowProblem::getStationBoundries() {
     return stationBoundries;
 }
 
+std::vector<double> FlowProblem::getStartTimes() {
+    return startTimes;
+}
+
 double FlowProblem::getCMax() {
-    return *(std::max_element(totalTimes.begin(), totalTimes.end()));
+    return *(std::max_element(finishTimes.begin(), finishTimes.end()));
 }
 
 unsigned int FlowProblem::getCMaxPosition() {
-    auto cMaxIt = std::max_element(totalTimes.begin(), totalTimes.end());
+    auto cMaxIt = std::max_element(finishTimes.begin(), finishTimes.end());
 
-    return std::distance(totalTimes.begin(), cMaxIt);
+    return std::distance(finishTimes.begin(), cMaxIt);
 }
 
 void FlowProblem::setCriticalPath(std::vector<unsigned int> critPath) {
@@ -143,8 +183,11 @@ void FlowProblem::findMachineBoundries() {
 void FlowProblem::calculateTotalTimes() {
     unsigned int operationCount = this->getOperationsCount();
 
-    totalTimes.clear();
-    totalTimes.assign(operationCount + 1, 0.0);
+    finishTimes.clear();
+    finishTimes.assign(operationCount + 1, 0.0);
+
+    startTimes.clear();
+    startTimes.assign(operationCount + 1, 0.0);
 
     longerPredecessor.clear();
     longerPredecessor.assign(operationCount + 1, 0.0);
@@ -154,16 +197,18 @@ void FlowProblem::calculateTotalTimes() {
     for (auto const &taskIndex : currentPermutation) {
         if (taskIndex != 0) {
             unsigned int previousTask = technologicalPredecessor.at(taskIndex);
-            double previousTaskTime = totalTimes.at(previousTask);
-            double machineFreeTime = totalTimes.at(previousOnMachine);
+            double previousTaskTime = finishTimes.at(previousTask);
+            double machineFreeTime = finishTimes.at(previousOnMachine);
 
             double currentTaskTime = taskTimes.at(taskIndex);
 
             if (machineFreeTime >= previousTaskTime) {
-                totalTimes.at(taskIndex) = machineFreeTime + currentTaskTime;
+                finishTimes.at(taskIndex) = machineFreeTime + currentTaskTime;
+                startTimes.at(taskIndex) = machineFreeTime;
                 longerPredecessor.at(taskIndex) = previousOnMachine;
             } else {
-                totalTimes.at(taskIndex) = previousTaskTime + currentTaskTime;
+                finishTimes.at(taskIndex) = previousTaskTime + currentTaskTime;
+                startTimes.at(taskIndex) = previousTaskTime;
                 longerPredecessor.at(taskIndex) = previousTask;
             }
         }
