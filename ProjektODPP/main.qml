@@ -1,6 +1,9 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
+
+
 
 ApplicationWindow {
     visible: true
@@ -8,30 +11,34 @@ ApplicationWindow {
     height: 480
     title: qsTr("Hello World")
 
-    SwipeView {
-        id: swipeView
-        anchors.fill: parent
-        currentIndex: tabBar.currentIndex
+    menuBar: MenuBar {
+        Menu {
+            title: "File"
+            MenuItem {
+                text: "New"
+                shortcut: StandardKey.New
+            }
 
-        Page1 {
-        }
-
-        Page {
-            Label {
-                text: qsTr("Second page")
-                anchors.centerIn: parent
+            MenuItem {
+                text: "Open"
+                shortcut: StandardKey.Open
+            }
+            MenuItem {
+                text: "Save"
+                shortcut: StandardKey.Save
+            }
+            MenuSeparator {}
+            MenuItem {
+                text: "Close"
+                shortcut: StandardKey.Close
+                onTriggered: Qt.quit();
             }
         }
     }
 
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("First")
-        }
-        TabButton {
-            text: qsTr("Second")
-        }
+    MainPage {
+        id: mainForm
+
+        anchors.fill: parent
     }
 }

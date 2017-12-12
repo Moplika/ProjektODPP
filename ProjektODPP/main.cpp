@@ -10,7 +10,7 @@
 
 int main(int argc, char *argv[])
 {
-    /* Kod pokazujący interfejs, nie usuwać
+    //Kod pokazujący interfejs, nie usuwać
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         return -1;
 
     return app.exec();
-*/
+
 
 //        mojPrzykladTest();
     //    std::cout << "Sama sciezka krytyczna: " << std::endl;
