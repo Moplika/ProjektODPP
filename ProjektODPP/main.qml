@@ -36,6 +36,14 @@ ApplicationWindow {
         }
     }
 
+    Action {
+        id: copyAction
+        text: "Copy"
+        shortcut: StandardKey.Copy
+        iconName: "edit-copy"
+        onTriggered: activeFocusItem.copy()
+    }
+
     MainPage {
         id: mainForm
 

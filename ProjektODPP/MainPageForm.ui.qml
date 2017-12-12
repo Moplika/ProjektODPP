@@ -4,7 +4,8 @@ import QtQuick.Layouts 1.3
 
 Item {
     width: 800
-    height: 560
+    height: 600
+    property alias buttonBar: buttonBar
 
     ColumnLayout {
         id: columnLayout
@@ -31,6 +32,9 @@ Item {
 
             Tab {
                 id: newClient
+                enabled: true
+                smooth: false
+                antialiasing: false
                 asynchronous: false
                 title: "Dodaj zadanie"
                 source: "NewClient.qml"
@@ -44,6 +48,11 @@ Item {
 
             Tab {
                 id: schedule
+                anchors.right: newClient.left
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.top: parent.top
+                anchors.rightMargin: 0
                 title: "Harmonogram"
                 source: "Schedule.qml"
             }
