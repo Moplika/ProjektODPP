@@ -3,8 +3,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
 
 Item {
-    width: 800
-    height: 600
+    width: 1024
+    height: 720
     property alias buttonBar: buttonBar
 
     ColumnLayout {

@@ -6,32 +6,23 @@ Item {
     height: 560
 
     ListModel {
-        id: testModel
+        id: testScheduleModel
         ListElement {
-            recordId: "1"
-            clientId: "4562189"
-            clientName: "Specjalna firma pana Kowalskiego"
-        }
-        ListElement {
-            recordId: "2"
-            clientId: "12345678"
-            clientName: "SSO Obuwie Tenisowe"
-        }
-        ListElement {
-            recordId: "3"
-            clientId: "172351"
-            clientName: "Tchibo"
+            orderId: "1"
+            clientId: "121587"
+            clientName: "Kowalski & Spolka"
+            stageId: "1"
+            teamId: "1"
+            executionTime: "25"
+            startTime: ""
+            endTime: ""
         }
     }
+
 
     TableView {
         id: tableView
         anchors.fill: parent
-        TableViewColumn {
-            role: "recordId"
-            title: "Lp"
-            width: 50
-        }
         TableViewColumn {
             role: "clientId"
             title: "Numer klienta"
@@ -42,6 +33,32 @@ Item {
             title: "Nazwa klienta"
             width: 200
         }
-        model: testModel
+        TableViewColumn {
+            role: "stageId"
+            title: "Nr etapu"
+            width: 100
+        }
+        TableViewColumn {
+            role: "teamId"
+            title: "Nr ekipy"
+            width: 100
+        }
+        TableViewColumn {
+            role: "executionTime"
+            title: "Czas wykonania"
+            width: 100
+        }
+        TableViewColumn {
+            role: "startTime"
+            title: "Czas rozpoczęcia"
+            width: 100
+        }
+        TableViewColumn {
+            role: "endTime"
+            title: "Czas zakończenia"
+            width: 100
+        }
+
+        model: testScheduleModel
     }
 }

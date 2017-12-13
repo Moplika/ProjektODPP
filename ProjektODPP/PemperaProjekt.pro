@@ -38,3 +38,5 @@ HEADERS += \
     station.h \
     machine.h \
     tabulistelement.h
+
+DISTFILES +=
