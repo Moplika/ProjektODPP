@@ -15,8 +15,13 @@ signals:
 public slots:
     void startCalculations();
 
+    bool addNewClient(int clientNumber, QString clientName, double stage1Time,
+                      double stage2Time, double stage3Time, double stage4Time);
+
 private:
     void calculateSchedule();
+
+    bool isNan(double number);
 
 };
 
