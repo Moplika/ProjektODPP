@@ -5,7 +5,8 @@ CONFIG += c++11
 SOURCES += main.cpp \
     flowproblem.cpp \
     cmaxtesting.cpp \
-    flowproblemdatareader.cpp
+    flowproblemdatareader.cpp \
+    uihandler.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,6 +38,7 @@ HEADERS += \
     flowproblemdatareader.h \
     station.h \
     machine.h \
-    tabulistelement.h
+    tabulistelement.h \
+    uihandler.h
 
 DISTFILES +=

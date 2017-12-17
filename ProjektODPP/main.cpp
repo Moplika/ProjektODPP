@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include <iostream>
 #include <algorithm>
@@ -7,6 +8,7 @@
 #include "flowproblem.h"
 #include "cmaxtesting.h"
 #include "flowproblemdatareader.h"
+#include "uihandler.h"
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +20,9 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
+
+    UIHandler uiHandler;
+    engine.rootContext()->setContextProperty(QString("uiHandler"), &uiHandler);
 
     return app.exec();
 
@@ -50,7 +55,7 @@ int main(int argc, char *argv[])
 //    permutationSwapAllFiles();
 
 //        tabuListTest();
-    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
+//    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
 //          stationBoundriesTest();
 
 

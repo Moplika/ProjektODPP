@@ -6,6 +6,8 @@ Item {
     id: item1
     width: 800
     height: 640
+    property alias btn_findSchedule: btn_findSchedule
+    property alias label_lastSchedule: label_lastSchedule
 
     RowLayout {
         id: rowLayout
@@ -13,7 +15,7 @@ Item {
         anchors.fill: parent
 
         Label {
-            id: label
+            id: label_lastSchedule
             width: 300
             text: qsTr("Ostatni harmonogram wyznaczono ...")
             Layout.columnSpan: 3
@@ -30,7 +32,7 @@ Item {
         }
 
         Button {
-            id: button
+            id: btn_findSchedule
             width: 150
             text: qsTr("Wyznacz harmonogram")
             Layout.fillHeight: false
