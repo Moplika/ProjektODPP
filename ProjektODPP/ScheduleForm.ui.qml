@@ -1,14 +1,27 @@
-import QtQuick 2.4
+import QtQuick 2.9
 import QtQuick.Controls 1.4
+import QtQuick.Controls 2.2
 
 Item {
+    id: window
     width: 800
     height: 560
+    property alias btn_refresh: btn_refresh
+    property alias tableView_schedule: tableView_schedule
+    property alias scheduleModel: scheduleModel
+
+    property int widthUnit: window.width/17
+
+    Rectangle {
+        id: background
+        color: "#ffffff"
+        anchors.fill: parent
+    }
 
     ListModel {
-        id: testScheduleModel
+        id: scheduleModel
         ListElement {
-            orderId: "1"
+            recordId: "1"
             clientId: "121587"
             clientName: "Kowalski & Spolka"
             stageId: "1"
@@ -20,45 +33,78 @@ Item {
     }
 
 
+
+    Button {
+        id: btn_refresh
+        height: 30
+        text: qsTr("Odśwież")
+        anchors.top: parent.top
+        anchors.topMargin: 5
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+    }
+
     TableView {
-        id: tableView
-        anchors.fill: parent
+        id: tableView_schedule
+        sortIndicatorColumn: 1
+        sortIndicatorOrder: 0
+        alternatingRowColors: true
+        frameVisible: true
+        highlightOnFocus: false
+        headerVisible: true
+        backgroundVisible: true
+        verticalScrollBarPolicy: -1
+        sortIndicatorVisible: true
+        anchors.top: btn_refresh.bottom
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.topMargin: 5
+        TableViewColumn {
+            role: "recordId"
+            title: "Lp"
+            width: widthUnit
+        }
         TableViewColumn {
             role: "clientId"
             title: "Numer klienta"
-            width: 100
+            width: 2*widthUnit
         }
         TableViewColumn {
             role: "clientName"
             title: "Nazwa klienta"
-            width: 200
+            width: 4*widthUnit
         }
         TableViewColumn {
             role: "stageId"
             title: "Nr etapu"
-            width: 100
+            width: 2*widthUnit
         }
         TableViewColumn {
             role: "teamId"
             title: "Nr ekipy"
-            width: 100
+            width: 2*widthUnit
         }
         TableViewColumn {
             role: "executionTime"
             title: "Czas wykonania"
-            width: 100
+            width: 2*widthUnit
         }
         TableViewColumn {
             role: "startTime"
             title: "Czas rozpoczęcia"
-            width: 100
+            width: 2*widthUnit
         }
         TableViewColumn {
             role: "endTime"
             title: "Czas zakończenia"
-            width: 100
+            width: 2*widthUnit
         }
 
-        model: testScheduleModel
+        model: scheduleModel
     }
+
+
+
+
 }

@@ -12,14 +12,23 @@ public:
 signals:
     void testSignal();
 
+    void addAllTasksRow(QList<QString> rowValues);
+    void addScheduleRow(QList<QString> rowValues);
+
 public slots:
     void startCalculations();
 
     bool addNewClient(int clientNumber, QString clientName, double stage1Time,
                       double stage2Time, double stage3Time, double stage4Time);
 
+    void refreshAllTasksTable();
+    void refreshScheduleTable();
+
 private:
     void calculateSchedule();
+
+    void createAllTasksRow();
+    void createScheduleRow();
 
     bool isNan(double number);
 

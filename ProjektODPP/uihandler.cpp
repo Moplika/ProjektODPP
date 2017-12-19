@@ -14,7 +14,7 @@ UIHandler::UIHandler(QObject *parent) : QObject(parent)
 void UIHandler::startCalculations() {
     //this->calculateSchedule();
     QFuture<void> t1 = QtConcurrent::run(this, calculateSchedule);
-//    t1.waitForFinished();
+    //    t1.waitForFinished();
 
 }
 
@@ -39,6 +39,52 @@ bool UIHandler::addNewClient(int clientNumber, QString clientName, double stage1
     std::cout << stage1Time << "   " << stage2Time << "   " << stage3Time << "   " << stage4Time << std::endl;
 
     return true;
+}
+
+void UIHandler::refreshAllTasksTable() {
+    // TODO: Odświeżanie całej tabeli
+    // TEMP: Tylko dodawanie nowego rzędu
+    this->createAllTasksRow();
+}
+
+void UIHandler::refreshScheduleTable() {
+    // TODO: Odświeżanie całej tabeli
+    // TEMP: Tylko dodawanie nowego rzędu
+    this->createScheduleRow();
+}
+
+void UIHandler::createAllTasksRow() {
+    // TODO: Dodać czytanie faktycznych wartości z pliku
+
+    QList<QString> rowValues;
+
+    rowValues.push_back("7");
+    rowValues.push_back("123456");
+    rowValues.push_back("Test klient");
+    rowValues.push_back("48");
+    rowValues.push_back("12");
+    rowValues.push_back("42");
+    rowValues.push_back("87");
+
+
+    emit addAllTasksRow(rowValues);
+}
+
+void UIHandler::createScheduleRow() {
+    // TODO: Dodać czytanie faktycznych wartości z pliku
+    QList<QString> rowValues;
+
+    rowValues.push_back("7");
+    rowValues.push_back("123456");
+    rowValues.push_back("Test klient");
+    rowValues.push_back("2");
+    rowValues.push_back("4");
+    rowValues.push_back("24");
+    rowValues.push_back("87");
+    rowValues.push_back("111");
+
+    emit addScheduleRow(rowValues);
+
 }
 
 bool UIHandler::isNan(double number) {

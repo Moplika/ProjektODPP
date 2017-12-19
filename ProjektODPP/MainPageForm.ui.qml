@@ -23,6 +23,8 @@ Item {
         TabView {
             id: tabView
             height: 500
+            visible: true
+            frameVisible: true
             Layout.fillHeight: true
             tabsVisible: true
             anchors.left: parent.left
@@ -57,5 +59,6 @@ Item {
                 source: "Schedule.qml"
             }
         }
+
     }
 }
