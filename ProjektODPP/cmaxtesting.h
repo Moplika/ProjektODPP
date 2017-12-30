@@ -11,6 +11,8 @@ bool cMaxTest(unsigned int n, unsigned int s, unsigned int ms,
 void mojPrzykladTest();
 void criticalPathTest();
 
+void firstPermutationTest20_5();
+
 void permutationSingleSwapTest();
 void permutationSwapingTest();
 void stationBoundriesTest();
