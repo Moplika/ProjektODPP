@@ -69,6 +69,14 @@ unsigned int FlowProblem::getCMaxPosition() {
     return std::distance(totalTimes.begin(), cMaxIt);
 }
 
+std::vector<unsigned int> FlowProblem::getCurrentPermutation() {
+    return currentPermutation;
+}
+
+std::vector<double> FlowProblem::getTastTimes() {
+    return taskTimes;
+}
+
 void FlowProblem::setCriticalPath(std::vector<unsigned int> critPath) {
     criticalPath = critPath;
     this->splitIntoBlocks();
@@ -544,9 +552,10 @@ bool FlowProblem::doesFulfillRequirements(unsigned int elementPosition, unsigned
     return true;
 }
 
-double FlowProblem::doTabuSearch(unsigned int iterationNb, unsigned int tabuListLength) {
+double FlowProblem::doTabuSearch(unsigned int iterationNb, unsigned int tabuListLength,
+                                 std::vector<unsigned int> &bestPermutation) {
     double bestCMax = this->getCMax();
-    auto bestPermutation = currentPermutation;
+    bestPermutation = currentPermutation;
 
     tabuListMaxLength = tabuListLength;
 
@@ -565,6 +574,12 @@ double FlowProblem::doTabuSearch(unsigned int iterationNb, unsigned int tabuList
 void FlowProblem::setTabuListMaxLength(unsigned int length) {
     tabuListMaxLength = length;
 }
+
+void FlowProblem::setPermutation(std::vector<unsigned int> permutation) {
+    currentPermutation = permutation;
+    this->recalculateTimes();
+}
+
 
 
 void FlowProblem::printPreviousTasks() {

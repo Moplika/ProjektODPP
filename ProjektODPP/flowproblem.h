@@ -35,12 +35,16 @@ public:
     double getCMax();
     unsigned int getCMaxPosition();
 
+    std::vector<unsigned int> getCurrentPermutation();
+    std::vector<double> getTastTimes();
+
     void setTabuListMaxLength(unsigned int length);
+    void setPermutation(std::vector<unsigned int> permutation);
 
     void findBestPermutation();
     void insertBehind(int elementPosition, int finalPosition);
 
-    double doTabuSearch(unsigned int iterationNb, unsigned int tabuListLength);
+    double doTabuSearch(unsigned int iterationNb, unsigned int tabuListLength, std::vector<unsigned int> &bestPermutation);
 
     // debug
     void printPreviousTasks();
