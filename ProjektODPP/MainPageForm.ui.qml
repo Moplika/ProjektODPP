@@ -5,13 +5,13 @@ import QtQuick.Layouts 1.3
 Item {
     width: 1024
     height: 720
+
     property alias buttonBar: buttonBar
 
     ColumnLayout {
         id: columnLayout
         spacing: 10
         anchors.fill: parent
-
         ButtonBar {
             id: buttonBar
             height: 40
@@ -19,6 +19,10 @@ Item {
             Layout.fillHeight: false
             Layout.preferredHeight: 40
         }
+//        GanttChart {
+//            id: ganttChart
+//        }
+
 
         TabView {
             id: tabView
@@ -31,6 +35,12 @@ Item {
             anchors.leftMargin: 0
             anchors.right: parent.right
             anchors.rightMargin: 0
+
+            Tab {
+                id: ganttChart
+                title: "GanttChart"
+                source: "GanttChart.qml"
+            }
 
             Tab {
                 id: newClient
@@ -58,7 +68,10 @@ Item {
                 title: "Harmonogram"
                 source: "Schedule.qml"
             }
+
+
         }
 
     }
+
 }

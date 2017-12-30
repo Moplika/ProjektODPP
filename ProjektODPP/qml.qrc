@@ -14,5 +14,6 @@
         <file>AllTasksForm.ui.qml</file>
         <file>Schedule.qml</file>
         <file>ScheduleForm.ui.qml</file>
+        <file>GanttChart.qml</file>
     </qresource>
 </RCC>
