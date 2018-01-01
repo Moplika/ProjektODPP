@@ -4,6 +4,7 @@
 #include <QString>
 #include <QtConcurrent/qtconcurrentrun.h>
 #include "cmaxtesting.h"
+#include "flowproblemdatareader.h"
 
 
 UIHandler::UIHandler(QObject *parent) : QObject(parent)
@@ -12,7 +13,6 @@ UIHandler::UIHandler(QObject *parent) : QObject(parent)
 }
 
 void UIHandler::startCalculations() {
-    //this->calculateSchedule();
     QFuture<void> t1 = QtConcurrent::run(this, calculateSchedule);
     //    t1.waitForFinished();
 
@@ -20,7 +20,27 @@ void UIHandler::startCalculations() {
 
 void UIHandler::calculateSchedule() {
     //TODO: Wczytanie danych i wykonanie faktycznych obliczeń
-    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
+    flowProblem = readFlowProblem("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
+
+    double firstCmax = flowProblem.getCMax();
+
+    std::cout << "Początkowe cMax: " << firstCmax << std::endl;
+
+    flowProblem.printCriticalPath();
+
+    std::vector<unsigned int> bestPermutation;
+    double bestCMax = flowProblem.doTabuSearch(10000, 20, bestPermutation);
+    flowProblem.setPermutation(bestPermutation);
+
+    flowProblem.printCurrentPermutation();
+    std::cout << "Najlepsze otrzymane cMax: " << bestCMax << std::endl;
+
+    this->refreshGanttChart();
+
+//    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
+
+
+
     emit testSignal();
 }
 
@@ -51,6 +71,53 @@ void UIHandler::refreshScheduleTable() {
     // TODO: Odświeżanie całej tabeli
     // TEMP: Tylko dodawanie nowego rzędu
     this->createScheduleRow();
+}
+
+void UIHandler::refreshGanttChart() {
+    auto permutation = flowProblem.getCurrentPermutation();
+    auto taskTimes = flowProblem.getTaskTimes();
+    auto startTimes = flowProblem.getStartTimes();
+    auto finishTimes = flowProblem.getFinishTimes();
+
+    QList<QString> indexes;
+    QList<double> gaps;
+    QList<double> lengths;
+
+    double endOfPrevious = 0;
+    int elementCount = 0;
+
+    for (auto it = permutation.begin() + 1; it != permutation.end(); it++) {
+        int index = *it;
+
+        if (index == 0) {
+            // Skonczona jedna maszyna
+            emit drawGanttRow(elementCount, indexes, gaps, lengths);
+
+            // Wyzerowanie dla następnego rzędu
+            elementCount = 0;
+            indexes.clear();
+            gaps.clear();
+            lengths.clear();
+
+            break; //TEMP
+        } else {
+            // Dalej na maszynie, dodaj elementy do wektorow
+            double taskTime = taskTimes.at(index);
+            double startTime = startTimes.at(index);
+            double gap = startTime - endOfPrevious;
+            endOfPrevious = finishTimes.at(index);
+
+            elementCount++;
+            indexes.push_back(QString::number(index));
+            lengths.push_back(taskTime);
+            gaps.push_back(gap);
+        }
+
+
+
+
+    }
+
 }
 
 void UIHandler::createAllTasksRow() {

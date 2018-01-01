@@ -39,7 +39,7 @@ public:
     unsigned int getCMaxPosition();
 
     std::vector<unsigned int> getCurrentPermutation();
-    std::vector<double> getTastTimes();
+    std::vector<double> getTaskTimes();
 
     void setTabuListMaxLength(unsigned int length);
     void setPermutation(std::vector<unsigned int> permutation);

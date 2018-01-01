@@ -2,6 +2,7 @@
 #define UIHANDLER_H
 
 #include <QObject>
+#include "flowproblem.h"
 
 class UIHandler : public QObject
 {
@@ -15,6 +16,9 @@ signals:
     void addAllTasksRow(QList<QString> rowValues);
     void addScheduleRow(QList<QString> rowValues);
 
+    void drawGanttRow(int elementCount, QList<QString> elementIndexes,
+                      QList<double>gaps, QList<double>lengths);
+
 public slots:
     void startCalculations();
 
@@ -24,6 +28,8 @@ public slots:
     void refreshAllTasksTable();
     void refreshScheduleTable();
 
+    void refreshGanttChart();
+
 private:
     void calculateSchedule();
 
@@ -31,6 +37,8 @@ private:
     void createScheduleRow();
 
     bool isNan(double number);
+
+    FlowProblem flowProblem;
 
 };
 

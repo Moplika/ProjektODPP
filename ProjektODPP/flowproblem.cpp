@@ -113,7 +113,7 @@ std::vector<unsigned int> FlowProblem::getCurrentPermutation() {
     return currentPermutation;
 }
 
-std::vector<double> FlowProblem::getTastTimes() {
+std::vector<double> FlowProblem::getTaskTimes() {
     return taskTimes;
 }
 
