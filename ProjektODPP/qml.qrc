@@ -15,5 +15,6 @@
         <file>Schedule.qml</file>
         <file>ScheduleForm.ui.qml</file>
         <file>GanttChart.qml</file>
+        <file>GanttChartRow.qml</file>
     </qresource>
 </RCC>

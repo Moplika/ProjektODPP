@@ -41,4 +41,5 @@ HEADERS += \
     tabulistelement.h \
     uihandler.h
 
-DISTFILES +=
+DISTFILES += \
+    GanttChartRow.qml

@@ -85,21 +85,29 @@ void UIHandler::refreshGanttChart() {
 
     double endOfPrevious = 0;
     int elementCount = 0;
+    int id = 1;
+
+    double minTime = *std::min_element(taskTimes.begin(), taskTimes.end());
+    double maxTime = *std::max_element(taskTimes.begin(), taskTimes.end());
+
+    emit startGanttDrawing(flowProblem.getCMax(), minTime, maxTime);
 
     for (auto it = permutation.begin() + 1; it != permutation.end(); it++) {
         int index = *it;
 
         if (index == 0) {
             // Skonczona jedna maszyna
-            emit drawGanttRow(elementCount, indexes, gaps, lengths);
+            emit drawGanttRow(id, elementCount, indexes, gaps, lengths);
 
             // Wyzerowanie dla następnego rzędu
             elementCount = 0;
+            endOfPrevious = 0;
+            id++;
             indexes.clear();
             gaps.clear();
             lengths.clear();
 
-            break; //TEMP
+//            break; //TEMP
         } else {
             // Dalej na maszynie, dodaj elementy do wektorow
             double taskTime = taskTimes.at(index);

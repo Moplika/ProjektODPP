@@ -16,7 +16,9 @@ signals:
     void addAllTasksRow(QList<QString> rowValues);
     void addScheduleRow(QList<QString> rowValues);
 
-    void drawGanttRow(int elementCount, QList<QString> elementIndexes,
+    void startGanttDrawing(double cMax, double minLength, double maxLength);
+
+    void drawGanttRow(int rowId, int elementCount, QList<QString> elementIndexes,
                       QList<double>gaps, QList<double>lengths);
 
 public slots:
