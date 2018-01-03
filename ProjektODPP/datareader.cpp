@@ -246,3 +246,11 @@ bool DataReader::Stworz_Wektor_Out(string nazwa_pliku) {
 
 
 }
+
+std::vector<std::vector<std::string>> DataReader::getInputFileContents() {
+    return Linie_In;
+}
+
+std::vector<std::vector<std::string>> DataReader::getOutputFileContents() {
+    return Linie_Out;
+}

@@ -15,6 +15,9 @@ public:
     DataReader();
     ~DataReader();
 
+    std::vector<std::vector<std::string>> getInputFileContents();
+    std::vector<std::vector<std::string>> getOutputFileContents();
+
 private:
 
     int iloscZadan;

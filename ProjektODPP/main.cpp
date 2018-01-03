@@ -80,8 +80,10 @@ void testDataReading() {
     Dane.Dodaj_Rekord("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv",121312,"Bolek i Lolek",12,113,15,16);
     std::cout << "Dodal jakis rekord" << std::endl;
     Dane.Stworz_Wektor_In("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv");
+    auto v1 = Dane.getInputFileContents();
     std::cout << "Strorzono wektor" << std::endl;
     Dane.Stworz_Wektor_Out("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv");
+    auto v2 = Dane.getOutputFileContents();
     std::cout << "Strorzono wektor" <<std:: endl;
     Dane.Wyniki("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv", Poczatki, Konce, Permutacje);
     std::cout << "No i koniec" << std::endl;
