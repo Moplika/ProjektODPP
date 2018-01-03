@@ -6,7 +6,8 @@ SOURCES += main.cpp \
     flowproblem.cpp \
     cmaxtesting.cpp \
     flowproblemdatareader.cpp \
-    uihandler.cpp
+    uihandler.cpp \
+    datareader.cpp
 
 RESOURCES += qml.qrc
 
@@ -39,7 +40,8 @@ HEADERS += \
     station.h \
     machine.h \
     tabulistelement.h \
-    uihandler.h
+    uihandler.h \
+    datareader.h
 
 DISTFILES += \
     GanttChartRow.qml
