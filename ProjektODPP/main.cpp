@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     UIHandler uiHandler;
     engine.rootContext()->setContextProperty(QString("uiHandler"), &uiHandler);
 
-    testDataReading();
+//    testDataReading();
 
     return app.exec();
 

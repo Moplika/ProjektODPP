@@ -24,6 +24,9 @@ ScheduleForm {
         onAddScheduleRow: {
             addRow(rowValues);
         }
+        onClearScheduleTable: {
+            scheduleModel.clear();
+        }
 
     }
 }

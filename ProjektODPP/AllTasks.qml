@@ -21,7 +21,12 @@ AllTasksForm {
     Connections {
         target: uiHandler;
         onAddAllTasksRow: {
+            console.log("Adding a line to AllTasks")
             addRow(rowValues);
+        }
+        onClearAllTasksTable: {
+            console.log("Clear the AllTask table")
+            allTasksModel.clear();
         }
 
     }

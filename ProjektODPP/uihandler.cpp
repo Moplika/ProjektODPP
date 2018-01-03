@@ -58,19 +58,63 @@ bool UIHandler::addNewClient(int clientNumber, QString clientName, double stage1
     std::cout << clientNumber << "   " << clientName.toStdString() << std::endl;
     std::cout << stage1Time << "   " << stage2Time << "   " << stage3Time << "   " << stage4Time << std::endl;
 
+    dataReader.Dodaj_Rekord(filepathIn, clientNumber, clientName.toStdString(),
+                            stage1Time, stage2Time, stage3Time, stage4Time);
+
     return true;
 }
 
 void UIHandler::refreshAllTasksTable() {
-    // TODO: Odświeżanie całej tabeli
-    // TEMP: Tylko dodawanie nowego rzędu
-    this->createAllTasksRow();
+    if (!dataReader.Stworz_Wektor_In(filepathIn)) {
+        std::cout << "Nie moge stworzyc wektora!" << std::endl;
+        return;
+    };
+    auto allRows = dataReader.getInputFileContents();
+
+    emit clearAllTasksTable();
+
+    // temp
+    int id = 1;
+
+    for (auto row : allRows) {
+        QList<QString> rowValues;
+
+        rowValues.push_back(QString::number(id));
+
+        for (auto string : row) {
+            rowValues.push_back(QString::fromStdString(string));
+        }
+
+        emit addAllTasksRow(rowValues);
+        id++;
+    }
 }
 
 void UIHandler::refreshScheduleTable() {
-    // TODO: Odświeżanie całej tabeli
-    // TEMP: Tylko dodawanie nowego rzędu
-    this->createScheduleRow();
+    if (!dataReader.Stworz_Wektor_Out("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv")) {
+        std::cout << "Nie moge stworzyc wektora!" << std::endl;
+        return;
+    };
+
+    auto allRows = dataReader.getOutputFileContents();
+
+    emit clearScheduleTable();
+
+    // temp
+    int id = 1;
+
+    for (auto row : allRows) {
+        QList<QString> rowValues;
+
+        rowValues.push_back(QString::number(id));
+
+        for (auto string : row) {
+            rowValues.push_back(QString::fromStdString(string));
+        }
+
+        emit addScheduleRow(rowValues);
+        id++;
+    }
 }
 
 void UIHandler::refreshGanttChart() {
@@ -159,6 +203,15 @@ void UIHandler::createScheduleRow() {
     rowValues.push_back("111");
 
     emit addScheduleRow(rowValues);
+
+}
+
+void UIHandler::openInputFile() {
+    // temp, zastąpić wyborem z systemu plików
+    filepathIn = "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv";
+    filepathOut = "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv";
+
+    dataReader.Odczyt_Pliku(filepathIn);
 
 }
 

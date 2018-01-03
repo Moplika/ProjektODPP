@@ -2,7 +2,9 @@
 #define UIHANDLER_H
 
 #include <QObject>
+#include <string>
 #include "flowproblem.h"
+#include "datareader.h"
 
 class UIHandler : public QObject
 {
@@ -14,7 +16,9 @@ signals:
     void testSignal();
 
     void addAllTasksRow(QList<QString> rowValues);
+    void clearAllTasksTable();
     void addScheduleRow(QList<QString> rowValues);
+    void clearScheduleTable();
 
     void startGanttDrawing(double cMax, double minLength, double maxLength);
 
@@ -32,6 +36,8 @@ public slots:
 
     void refreshGanttChart();
 
+    void openInputFile();
+
 private:
     void calculateSchedule();
 
@@ -41,6 +47,10 @@ private:
     bool isNan(double number);
 
     FlowProblem flowProblem;
+    DataReader dataReader;
+    std::string filepathIn;
+    std::string filepathOut;
+
 
 };
 

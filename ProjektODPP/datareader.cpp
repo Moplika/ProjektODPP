@@ -28,9 +28,9 @@ DataReader::~DataReader() {
 
 bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
     ifstream plik;
-    plik.open(nazwa_pliku.c_str());
+    plik.open(nazwa_pliku);//.c_str());
     if (!plik.good()) {
-        cerr << "Brak pliku \n" << endl;
+        cerr << "Brak pliku " << nazwa_pliku << endl;
         return false;
     }
     string temp;
@@ -164,9 +164,9 @@ bool DataReader::Wyniki(string nazwa_pliku, vector <int>  Start, vector <int> Ko
 
 bool DataReader::Stworz_Wektor_In(string nazwa_pliku) {
     ifstream plik;
-    plik.open(nazwa_pliku.c_str());
+    plik.open(nazwa_pliku);//.c_str());
     if (!plik.good()) {
-        cerr << "Brak pliku \n" << endl;
+        cerr << "Brak pliku " << nazwa_pliku << endl;
         return false;
     }
     string temp;
@@ -197,13 +197,14 @@ bool DataReader::Stworz_Wektor_In(string nazwa_pliku) {
         }
     }
     plik.close();
+    return true;
 }
 
 bool DataReader::Stworz_Wektor_Out(string nazwa_pliku) {
     ifstream plik;
-    plik.open(nazwa_pliku.c_str());
+    plik.open(nazwa_pliku);//.c_str());
     if (!plik.good()) {
-        cerr << "Brak pliku \n" << endl;
+        cerr << "Brak pliku " << nazwa_pliku << endl;
         return false;
     }
     string temp;
@@ -242,7 +243,7 @@ bool DataReader::Stworz_Wektor_Out(string nazwa_pliku) {
     Linie_Out.pop_back();
 
     plik.close();
-
+    return true;
 
 
 }

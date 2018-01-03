@@ -22,6 +22,7 @@ ApplicationWindow {
             MenuItem {
                 text: "Open"
                 shortcut: StandardKey.Open
+                onTriggered: uiHandler.openInputFile()
             }
             MenuItem {
                 text: "Save"

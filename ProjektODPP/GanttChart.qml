@@ -20,7 +20,7 @@ Item {
             id: columnLayout
             y: 50
             width: viewWidth
-            height: parent
+            height: parent.height
             spacing: 0
 
             GanttChartRow {
