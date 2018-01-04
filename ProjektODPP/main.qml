@@ -2,7 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.3
-
+import QtQuick.Dialogs 1.2
 
 
 ApplicationWindow {
@@ -22,7 +22,8 @@ ApplicationWindow {
             MenuItem {
                 text: "Open"
                 shortcut: StandardKey.Open
-                onTriggered: uiHandler.openInputFile()
+                onTriggered: fileDialog.open()
+//                onTriggered: uiHandler.openInputFile()
             }
             MenuItem {
                 text: "Save"
@@ -49,5 +50,9 @@ ApplicationWindow {
         id: mainForm
 
         anchors.fill: parent
+    }
+
+    FilePickerDialog {
+        id: fileDialog
     }
 }

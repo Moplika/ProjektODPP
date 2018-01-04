@@ -2,6 +2,7 @@
 #define UIHANDLER_H
 
 #include <QObject>
+#include <QUrl>
 #include <string>
 #include "flowproblem.h"
 #include "datareader.h"
@@ -36,7 +37,7 @@ public slots:
 
     void refreshGanttChart();
 
-    void openInputFile();
+    void openInputFile(QUrl filePath);
 
     bool isInputFileLoaded();
     bool isOutputFileLoaded();

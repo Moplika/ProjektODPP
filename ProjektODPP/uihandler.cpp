@@ -207,10 +207,13 @@ void UIHandler::createScheduleRow() {
 
 }
 
-void UIHandler::openInputFile() {
+void UIHandler::openInputFile(QUrl filePath) {
     // temp, zastąpić wyborem z systemu plików
-    filepathIn = "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv";
+
+    filepathIn = filePath.toLocalFile().toStdString();
     filepathOut = "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv";
+
+    std::cout << "Sciezka: " << filepathIn << std::endl;
 
     isInputLoaded = dataReader.Odczyt_Pliku(filepathIn);
     isOutputLoaded = true;
