@@ -42,7 +42,7 @@ void UIHandler::calculateSchedule() {
 
 
 
-    emit testSignal();
+    emit calculationFinished();
 }
 
 bool UIHandler::addNewClient(int clientNumber, QString clientName, double stage1Time,

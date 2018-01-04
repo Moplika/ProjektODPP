@@ -14,7 +14,7 @@ public:
     explicit UIHandler(QObject *parent = nullptr);
 
 signals:
-    void testSignal();
+    void calculationFinished();
 
     void addAllTasksRow(QList<QString> rowValues);
     void clearAllTasksTable();

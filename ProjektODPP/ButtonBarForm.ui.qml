@@ -6,6 +6,7 @@ Item {
     id: item1
     width: 800
     height: 640
+    property alias btn_saveSchedule: btn_saveSchedule
     property alias btn_findSchedule: btn_findSchedule
     property alias label_lastSchedule: label_lastSchedule
 
@@ -41,15 +42,8 @@ Item {
         }
 
         Button {
-            id: button1
-            text: qsTr("Zaparz kawę")
-            Layout.preferredWidth: 130
-            Layout.fillHeight: false
-        }
-
-        Button {
-            id: button2
-            text: qsTr("Zrób cos jeszcze")
+            id: btn_saveSchedule
+            text: qsTr("Zapisz wyniki")
             Layout.preferredWidth: 130
             Layout.fillHeight: false
         }

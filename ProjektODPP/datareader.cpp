@@ -52,7 +52,7 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
 
             for (int j = 0; j < iloscStanowisk; j++) {
                 plik >> czas;
-                cout << "Czas" << endl;
+//                cout << "Czas" << endl;
                 Czasy.push_back(czas);
                 if (j != iloscStanowisk - 1)
                     plik >> temp1;
@@ -160,7 +160,7 @@ bool DataReader::Wyniki(string nazwa_pliku, vector <int>  Start, vector <int> Ko
     plik_zap << endl;
 
     plik_zap.close();
-
+    return true;
 }
 
 bool DataReader::Stworz_Wektor_In(string nazwa_pliku) {
