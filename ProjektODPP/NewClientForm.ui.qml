@@ -13,7 +13,6 @@ Item {
     property alias text_timeStage1: text_timeStage1
     property alias text_clientName: text_clientName
     property alias text_clientId: text_clientId
-    property alias text_orderId: text_orderId
 
     Rectangle {
         id: rectangle
@@ -34,8 +33,11 @@ Item {
 
         Label {
             id: label_orderID
-            text: qsTr("Nr zamówienia")
-            font.pointSize: 10
+            text: qsTr("Nowe Zamówienie")
+            Layout.minimumHeight: 35
+            font.bold: true
+            Layout.columnSpan: 5
+            font.pointSize: 13
             Layout.fillHeight: true
             Layout.preferredWidth: 150
             Layout.fillWidth: true
@@ -43,35 +45,10 @@ Item {
             horizontalAlignment: Text.AlignHCenter
         }
 
-        TextField {
-            id: text_orderId
-            text: qsTr("")
-            Layout.maximumHeight: 50
-            Layout.maximumWidth: 65535
-            Layout.preferredWidth: 450
-            Layout.columnSpan: 3
-            Layout.fillWidth: true
-            Layout.preferredHeight: 35
-            Layout.fillHeight: true
-        }
-
-        Rectangle {
-            id: blank_row1
-            width: 200
-            height: 200
-            color: "#00000000"
-            Layout.preferredWidth: 150
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Layout.columnSpan: 1
-            border.color: "#00000000"
-            Layout.preferredHeight: 35
-            Layout.fillWidth: true
-        }
-
         Label {
             id: label_clientId
             text: qsTr("Nr klienta")
+            fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 10
@@ -84,7 +61,7 @@ Item {
             id: text_clientId
             text: qsTr("")
             Layout.maximumHeight: 50
-            Layout.preferredWidth: -1
+            Layout.preferredWidth: 450
             Layout.fillHeight: true
             Layout.preferredHeight: 35
             Layout.fillWidth: true
@@ -149,7 +126,8 @@ Item {
 
         Label {
             id: label_timeStage1
-            text: qsTr("Czas etapu 1")
+            text: qsTr("Czas etapu 1 <br>(fundamenty)")
+            wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 10
@@ -184,7 +162,8 @@ Item {
 
         Label {
             id: label_timeStage5
-            text: qsTr("Czas etapu 2")
+            text: qsTr("Czas etapu 2 <br>(stan surowy)")
+            wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 10
@@ -218,7 +197,8 @@ Item {
 
         Label {
             id: label_timeStage6
-            text: qsTr("Czas etapu 3")
+            text: qsTr("Czas etapu 3 <br> (dach)")
+            wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 10
@@ -252,7 +232,8 @@ Item {
 
         Label {
             id: label_timeStage7
-            text: qsTr("Czas etapu 4")
+            text: qsTr("Czas etapu 4 <br>(wykończenie)")
+            wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 10
@@ -298,7 +279,7 @@ Item {
 
         Button {
             id: btn_addClient
-            text: qsTr("Dodaj zamówienie")
+            text: qsTr("Dodaj ")
             font.pointSize: 10
             Layout.preferredWidth: 150
             Layout.fillWidth: true
