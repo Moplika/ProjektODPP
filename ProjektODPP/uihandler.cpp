@@ -9,7 +9,8 @@
 
 UIHandler::UIHandler(QObject *parent) : QObject(parent)
 {
-
+    isInputLoaded = false;
+    isOutputLoaded = false;
 }
 
 void UIHandler::startCalculations() {
@@ -211,7 +212,17 @@ void UIHandler::openInputFile() {
     filepathIn = "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv";
     filepathOut = "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv";
 
-    dataReader.Odczyt_Pliku(filepathIn);
+    isInputLoaded = dataReader.Odczyt_Pliku(filepathIn);
+    isOutputLoaded = true;
+
+}
+
+bool UIHandler::isInputFileLoaded() {
+    return isInputLoaded;
+}
+
+bool UIHandler::isOutputFileLoaded() {
+    return isOutputLoaded;
 
 }
 

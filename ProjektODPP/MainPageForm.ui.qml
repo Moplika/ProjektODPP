@@ -5,6 +5,11 @@ import QtQuick.Layouts 1.3
 Item {
     width: 1024
     height: 720
+    property alias tabView: tabView
+    property alias schedule: schedule
+    property alias allTasks: allTasks
+    property alias newClient: newClient
+    property alias ganttChart: ganttChart
 
     property alias buttonBar: buttonBar
 
@@ -36,11 +41,6 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: 0
 
-            Tab {
-                id: ganttChart
-                title: "GanttChart"
-                source: "GanttChart.qml"
-            }
 
             Tab {
                 id: newClient
@@ -56,6 +56,12 @@ Item {
                 id: allTasks
                 title: "Wszystkie zadania"
                 source: "AllTasks.qml"
+            }
+
+            Tab {
+                id: ganttChart
+                title: "GanttChart"
+                source: "GanttChart.qml"
             }
 
             Tab {

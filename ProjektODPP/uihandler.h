@@ -38,6 +38,9 @@ public slots:
 
     void openInputFile();
 
+    bool isInputFileLoaded();
+    bool isOutputFileLoaded();
+
 private:
     void calculateSchedule();
 
@@ -50,6 +53,9 @@ private:
     DataReader dataReader;
     std::string filepathIn;
     std::string filepathOut;
+
+    bool isInputLoaded;
+    bool isOutputLoaded;
 
 
 };

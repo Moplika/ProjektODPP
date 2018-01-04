@@ -64,6 +64,7 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
     plik.clear();
     plik.close();
 
+    return true;
 }
 
 bool DataReader::Dodaj_Rekord(string nazwa_pliku, int NumerKlienta, string NazwaKlienta, int Czas1, int Czas2, int Czas3, int Czas4) {
