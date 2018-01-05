@@ -38,6 +38,7 @@ public slots:
     void refreshGanttChart();
 
     void openInputFile(QUrl filePath);
+    void saveToFile(QUrl filePath);
 
     bool isInputFileLoaded();
     bool isOutputFileLoaded();

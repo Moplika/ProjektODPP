@@ -21,7 +21,7 @@ void UIHandler::startCalculations() {
 
 void UIHandler::calculateSchedule() {
     //TODO: Wczytanie danych i wykonanie faktycznych obliczeń
-    flowProblem = readFlowProblem("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
+    flowProblem = readFlowProblem("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex25_4.txt");
 
     double firstCmax = flowProblem.getCMax();
 
@@ -30,7 +30,7 @@ void UIHandler::calculateSchedule() {
     flowProblem.printCriticalPath();
 
     std::vector<unsigned int> bestPermutation;
-    double bestCMax = flowProblem.doTabuSearch(10000, 20, bestPermutation);
+    double bestCMax = flowProblem.doTabuSearch(2000, 8, bestPermutation);
     flowProblem.setPermutation(bestPermutation);
 
     flowProblem.printCurrentPermutation();
@@ -38,7 +38,7 @@ void UIHandler::calculateSchedule() {
 
     this->refreshGanttChart();
 
-//    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
+    //    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
 
 
 
@@ -92,7 +92,7 @@ void UIHandler::refreshAllTasksTable() {
 }
 
 void UIHandler::refreshScheduleTable() {
-    if (!dataReader.Stworz_Wektor_Out("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv")) {
+    if (!dataReader.Stworz_Wektor_Out(filepathOut)) {
         std::cout << "Nie moge stworzyc wektora!" << std::endl;
         return;
     };
@@ -152,7 +152,7 @@ void UIHandler::refreshGanttChart() {
             gaps.clear();
             lengths.clear();
 
-//            break; //TEMP
+            //            break; //TEMP
         } else {
             // Dalej na maszynie, dodaj elementy do wektorow
             double taskTime = taskTimes.at(index);
@@ -209,15 +209,22 @@ void UIHandler::createScheduleRow() {
 
 void UIHandler::openInputFile(QUrl filePath) {
     // temp, zastąpić wyborem z systemu plików
-
     filepathIn = filePath.toLocalFile().toStdString();
-    filepathOut = "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv";
-
     std::cout << "Sciezka: " << filepathIn << std::endl;
 
     isInputLoaded = dataReader.Odczyt_Pliku(filepathIn);
-    isOutputLoaded = true;
+}
 
+void UIHandler::saveToFile(QUrl filePath) {
+    filepathOut = filePath.toLocalFile().toStdString();
+    std::cout << "Sciezka: " << filepathOut << std::endl;
+
+//    isOutputLoaded = true;
+
+    isOutputLoaded = dataReader.Wyniki(filepathOut,
+                                       flowProblem.getStartTimes(),
+                                       flowProblem.getFinishTimes(),
+                                       flowProblem.getCurrentPermutation());
 }
 
 bool UIHandler::isInputFileLoaded() {

@@ -11,8 +11,10 @@ ButtonBarForm {
         label_lastSchedule.text = "Trwa wyznaczanie harmonogramu"
         btn_saveSchedule.enabled = false;
         uiHandler.startCalculations();
+    }
 
-
+    btn_saveSchedule.onClicked: {
+        fileDialog.open();
     }
 
     Connections {
@@ -22,6 +24,15 @@ ButtonBarForm {
 
             label_lastSchedule.text = "Ostatni harmonogram wyznaczono " + dateString;
             btn_saveSchedule.enabled = true;
+        }
+    }
+
+    FilePickerDialog {
+        id: fileDialog
+        title: "Wybierz plik wyjsciowy: "
+        selectExisting: false
+        onAccepted: {
+            uiHandler.saveToFile(fileUrl);
         }
     }
 }

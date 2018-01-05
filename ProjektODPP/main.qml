@@ -54,5 +54,9 @@ ApplicationWindow {
 
     FilePickerDialog {
         id: fileDialog
+        title: "Wybierz plik wejsciowy: "
+        onAccepted: {
+            uiHandler.openInputFile(fileUrl);
+        }
     }
 }

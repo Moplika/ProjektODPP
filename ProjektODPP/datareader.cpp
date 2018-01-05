@@ -118,7 +118,7 @@ bool DataReader::Formatowanie(string nazwa_pliku, vector <unsigned int> Permutac
     plik_zap << endl;
 }
 
-bool DataReader::Wyniki(string nazwa_pliku, vector <int>  Start, vector <int> Koniec, vector <unsigned int> Permutacje) {
+bool DataReader::Wyniki(string nazwa_pliku, vector <double>  Start, vector <double> Koniec, vector <unsigned int> Permutacje) {
 
     ofstream plik_zap;
     plik_zap.open(nazwa_pliku.c_str());

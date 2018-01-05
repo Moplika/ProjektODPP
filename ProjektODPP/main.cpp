@@ -70,8 +70,8 @@ int main(int argc, char *argv[])
 
 void testDataReading() {
     std::cout << "Czy cos w ogole dziala" << std::endl;
-    std::vector <int> Poczatki = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
-    std::vector <int> Konce = { 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
+    std::vector <double> Poczatki = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24};
+    std::vector <double> Konce = { 2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
     std::vector <unsigned int> Permutacje = { 0,1,9,13,0,5,21,17,0,14,6,10,0,2,22,18,0,7,23,3,0,11,15,19,0,12,8,20,16,0,4,24,0 };
     DataReader Dane;
     std::cout << "Udalo sie utworzyc obiekt" << std::endl;

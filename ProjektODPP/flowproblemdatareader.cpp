@@ -63,8 +63,9 @@ FlowProblem readFlowProblem(std::string filename) {
 
     inputStream.close();
 
-    FlowProblem flowProblem(taskCount, stationCount, machineCount);
-    flowProblem.setData(times, permutation);
+    FlowProblem flowProblem(taskCount, stationCount, machineCount, times);
+//    flowProblem.setData(times, permutation);
+
 
 
     return flowProblem;
