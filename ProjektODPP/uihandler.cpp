@@ -11,12 +11,12 @@ UIHandler::UIHandler(QObject *parent) : QObject(parent)
 {
     isInputLoaded = false;
     isOutputLoaded = false;
+    wasCalculated = false;
 }
 
 void UIHandler::startCalculations() {
     QFuture<void> t1 = QtConcurrent::run(this, calculateSchedule);
     //    t1.waitForFinished();
-
 }
 
 void UIHandler::calculateSchedule() {
@@ -43,6 +43,7 @@ void UIHandler::calculateSchedule() {
 
 
     emit calculationFinished();
+    wasCalculated = true;
 }
 
 bool UIHandler::addNewClient(int clientNumber, QString clientName, double stage1Time,
@@ -207,12 +208,33 @@ void UIHandler::createScheduleRow() {
 
 }
 
+void UIHandler::createNewInputFile(QUrl filePath) {
+    filepathIn = filePath.toLocalFile().toStdString();
+    std::cout << "Sciezka: " << filepathIn << std::endl;
+
+    // TODO: Zastąpić funkcją od Artura
+//    isInputLoaded = dataReader.Odczyt_Pliku(filepathIn);
+
+    if (isInputLoaded) {
+        emit inputFileOpened();
+    } else {
+        emit inputFileNotOpened();
+    }
+    wasCalculated = false;
+}
+
 void UIHandler::openInputFile(QUrl filePath) {
-    // temp, zastąpić wyborem z systemu plików
     filepathIn = filePath.toLocalFile().toStdString();
     std::cout << "Sciezka: " << filepathIn << std::endl;
 
     isInputLoaded = dataReader.Odczyt_Pliku(filepathIn);
+
+    if (isInputLoaded) {
+        emit inputFileOpened();
+    } else {
+        emit inputFileNotOpened();
+    }
+    wasCalculated = false;
 }
 
 void UIHandler::saveToFile(QUrl filePath) {
@@ -234,6 +256,10 @@ bool UIHandler::isInputFileLoaded() {
 bool UIHandler::isOutputFileLoaded() {
     return isOutputLoaded;
 
+}
+
+bool UIHandler::wasScheduleCalculated() {
+    return wasCalculated;
 }
 
 bool UIHandler::isNan(double number) {

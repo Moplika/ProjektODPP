@@ -5,7 +5,8 @@ ButtonBarForm {
     property string dateString
 
     btn_saveSchedule.enabled: false;
-    label_lastSchedule.text: "Harmonogram nie został jeszcze wyznaczony"
+    btn_findSchedule.enabled: false;
+    label_lastSchedule.text: "Brak pliku wejściowego. Otwórz plik lub utwórz nowy"
 
     btn_findSchedule.onClicked: {
         label_lastSchedule.text = "Trwa wyznaczanie harmonogramu"
@@ -19,12 +20,23 @@ ButtonBarForm {
 
     Connections {
         target: uiHandler;
+        onInputFileOpened: {
+            label_lastSchedule.text = "Harmonogram nie został jeszcze wyznaczony"
+            label_lastSchedule.color = "black"
+            btn_findSchedule.enabled = true;
+        }
+        onInputFileNotOpened: {
+            label_lastSchedule.text = "Błąd otwarcia pliku wejściowego"
+            label_lastSchedule.color = "red"
+        }
+
         onCalculationFinished: {
             dateString = new Date().toLocaleTimeString(Qt.locale(), "hh:mm");
 
             label_lastSchedule.text = "Ostatni harmonogram wyznaczono " + dateString;
             btn_saveSchedule.enabled = true;
         }
+
     }
 
     FilePickerDialog {

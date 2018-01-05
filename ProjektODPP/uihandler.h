@@ -26,6 +26,14 @@ signals:
     void drawGanttRow(int rowId, int elementCount, QList<QString> elementIndexes,
                       QList<double>gaps, QList<double>lengths);
 
+    void inputFileOpened();
+    void inputFileNotOpened();
+
+    void outputSaved();
+    void outputNotSaved();
+
+
+
 public slots:
     void startCalculations();
 
@@ -37,11 +45,13 @@ public slots:
 
     void refreshGanttChart();
 
+    void createNewInputFile(QUrl filePath);
     void openInputFile(QUrl filePath);
     void saveToFile(QUrl filePath);
 
     bool isInputFileLoaded();
     bool isOutputFileLoaded();
+    bool wasScheduleCalculated();
 
 private:
     void calculateSchedule();
@@ -58,6 +68,7 @@ private:
 
     bool isInputLoaded;
     bool isOutputLoaded;
+    bool wasCalculated;
 
 
 };

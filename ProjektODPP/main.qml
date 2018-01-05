@@ -13,25 +13,28 @@ ApplicationWindow {
 
     menuBar: MenuBar {
         Menu {
-            title: "File"
+            title: "Plik"
             MenuItem {
-                text: "New"
+                text: "Nowy plik wejściowy"
                 shortcut: StandardKey.New
+                onTriggered: newFileDialog.open()
             }
 
             MenuItem {
-                text: "Open"
+                text: "Otwórz plik wejściowy"
                 shortcut: StandardKey.Open
-                onTriggered: fileDialog.open()
-//                onTriggered: uiHandler.openInputFile()
+                onTriggered: inputFileDialog.open()
             }
             MenuItem {
-                text: "Save"
+                id: menuSave
+                text: "Zapisz wyniki obliczeń"
                 shortcut: StandardKey.Save
+                enabled: false;
+                onTriggered: outputFileDialog.open()
             }
             MenuSeparator {}
             MenuItem {
-                text: "Close"
+                text: "Zamknij"
                 shortcut: StandardKey.Close
                 onTriggered: Qt.quit();
             }
@@ -53,10 +56,41 @@ ApplicationWindow {
     }
 
     FilePickerDialog {
-        id: fileDialog
+        id: newFileDialog
+        title: "Wybierz plik wejsciowy: "
+        selectExisting: false
+        onAccepted: {
+            uiHandler.createNewInputFile(fileUrl);
+        }
+    }
+
+    FilePickerDialog {
+        id: inputFileDialog
         title: "Wybierz plik wejsciowy: "
         onAccepted: {
             uiHandler.openInputFile(fileUrl);
         }
     }
+
+    FilePickerDialog {
+        id: outputFileDialog
+        title: "Wybierz plik wyjsciowy: "
+        selectExisting: false
+        onAccepted: {
+            uiHandler.saveToFile(fileUrl);
+        }
+    }
+
+    Connections {
+        target: uiHandler
+        onInputFileOpened: {
+            menuSave.enabled = false;
+        }
+
+        onCalculationFinished: {
+            menuSave.enabled = true;
+        }
+
+    }
+
 }

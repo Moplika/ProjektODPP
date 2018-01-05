@@ -20,16 +20,16 @@ Item {
 
     ListModel {
         id: scheduleModel
-        ListElement {
-            recordId: "1"
-            clientId: "121587"
-            clientName: "Kowalski & Spolka"
-            stageId: "1"
-            teamId: "1"
-            executionTime: "25"
-            startTime: ""
-            endTime: ""
-        }
+//        ListElement {
+//            recordId: "1"
+//            clientId: "121587"
+//            clientName: "Kowalski & Spolka"
+//            stageId: "1"
+//            teamId: "1"
+//            executionTime: "25"
+//            startTime: ""
+//            endTime: ""
+//        }
     }
 
 

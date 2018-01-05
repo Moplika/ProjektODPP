@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 Item {
     width: 1024
     height: 720
+    property alias start: start
     property alias tabView: tabView
     property alias schedule: schedule
     property alias allTasks: allTasks
@@ -24,9 +25,9 @@ Item {
             Layout.fillHeight: false
             Layout.preferredHeight: 40
         }
-//        GanttChart {
-//            id: ganttChart
-//        }
+        //        GanttChart {
+        //            id: ganttChart
+        //        }
 
 
         TabView {
@@ -41,6 +42,13 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: 0
 
+
+            Tab {
+                id: start
+                active: false
+                source: "Start.qml"
+                title: "Start"
+            }
 
             Tab {
                 id: newClient
@@ -74,6 +82,7 @@ Item {
                 title: "Harmonogram"
                 source: "Schedule.qml"
             }
+
 
 
         }
