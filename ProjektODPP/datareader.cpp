@@ -256,3 +256,11 @@ std::vector<std::vector<std::string>> DataReader::getInputFileContents() {
 std::vector<std::vector<std::string>> DataReader::getOutputFileContents() {
     return Linie_Out;
 }
+
+unsigned int DataReader::getTaskCount() {
+    return iloscZadan;
+}
+
+std::vector<double> DataReader::getTaskTimes() {
+    return Czasy;
+}

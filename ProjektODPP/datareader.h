@@ -19,6 +19,10 @@ public:
     std::vector<std::vector<std::string>> getInputFileContents();
     std::vector<std::vector<std::string>> getOutputFileContents();
 
+    unsigned int getTaskCount();
+    std::vector<double> getTaskTimes();
+
+
 private:
 
     int iloscZadan;

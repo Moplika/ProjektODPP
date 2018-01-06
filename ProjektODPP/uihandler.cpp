@@ -21,7 +21,14 @@ void UIHandler::startCalculations() {
 
 void UIHandler::calculateSchedule() {
     //TODO: Wczytanie danych i wykonanie faktycznych obliczeń
-    flowProblem = readFlowProblem("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex25_4.txt");
+//    flowProblem = readFlowProblem("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex25_4.txt");
+
+    dataReader.Odczyt_Pliku(filepathIn);
+
+    unsigned int taskCount = dataReader.getTaskCount();
+    auto taskTimes = dataReader.getTaskTimes();
+
+    flowProblem = FlowProblem(taskCount, 4, 2, taskTimes);
 
     double firstCmax = flowProblem.getCMax();
 
@@ -36,14 +43,11 @@ void UIHandler::calculateSchedule() {
     flowProblem.printCurrentPermutation();
     std::cout << "Najlepsze otrzymane cMax: " << bestCMax << std::endl;
 
-    this->refreshGanttChart();
-
-    //    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
-
-
-
     emit calculationFinished();
     wasCalculated = true;
+    this->refreshGanttChart();
+
+
 }
 
 bool UIHandler::addNewClient(int clientNumber, QString clientName, double stage1Time,
