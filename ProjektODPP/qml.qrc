@@ -17,5 +17,7 @@
         <file>GanttChart.qml</file>
         <file>GanttChartRow.qml</file>
         <file>FilePickerDialog.qml</file>
+        <file>Start.qml</file>
+        <file>resources/logo.png</file>
     </qresource>
 </RCC>

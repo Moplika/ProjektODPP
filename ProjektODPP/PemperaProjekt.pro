@@ -44,4 +44,8 @@ HEADERS += \
     datareader.h
 
 DISTFILES += \
-    GanttChartRow.qml
+    GanttChartRow.qml \
+    resources/logo.png
+
+
+OTHER_FILES +=
