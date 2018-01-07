@@ -25,10 +25,6 @@ Item {
             Layout.fillHeight: false
             Layout.preferredHeight: 40
         }
-        //        GanttChart {
-        //            id: ganttChart
-        //        }
-
 
         TabView {
             id: tabView
@@ -68,25 +64,15 @@ Item {
 
             Tab {
                 id: ganttChart
-                title: "GanttChart"
+                title: "Wykres Gantta"
                 source: "GanttChart.qml"
             }
 
             Tab {
                 id: schedule
-                anchors.right: newClient.left
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.top: parent.top
-                anchors.rightMargin: 0
                 title: "Harmonogram"
                 source: "Schedule.qml"
             }
-
-
-
         }
-
     }
-
 }

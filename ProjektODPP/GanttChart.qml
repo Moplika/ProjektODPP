@@ -8,6 +8,11 @@ Item {
 
     property int viewWidth: 10000
     property int rowHeight: 20
+    property int lineWidth: 1
+    property int lineSpacing: 10
+    property int rowSpacing: 3
+    property int maxLegendEntry: 100
+    property int legendSpacing: 50
 
     anchors.fill: parent
 
@@ -16,53 +21,188 @@ Item {
         anchors.fill: parent
         clip: true
 
-        ColumnLayout {
-            id: columnLayout
-            y: 50
-            width: viewWidth
-            height: parent.height
-            spacing: 0
+        RowLayout {
+            id: rowLayout
+            y: 15
+            spacing: 5
 
-            GanttChartRow {
-                id: row1
+            ColumnLayout {
+                y: 0
+                width: 50
+                height: parent.height
+                Layout.preferredHeight: 371
+                Layout.preferredWidth: 50
+                Layout.fillHeight: true
+                Layout.fillWidth: false
+                spacing: 8
+
+                Text {
+                    height: rowHeight + 5
+                    text: ""
+                    Layout.preferredHeight: 35
+                }
+
+                Text {
+                    height: 2*rowHeight
+                    text: "Etap 1: "
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    Layout.preferredHeight: 75
+                    Layout.rowSpan: 2
+                    Layout.columnSpan: 1
+                }
+
+                Text {
+                    height: 2*rowHeight
+                    text: "Etap 2: "
+                    Layout.fillWidth: true
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 75
+                    Layout.columnSpan: 2
+                }
+
+                Text {
+                    height: 2*rowHeight
+                    text: "Etap 3: "
+                    Layout.fillWidth: true
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 75
+                    Layout.rowSpan: 2
+                }
+                Text {
+                    height: 2*rowHeight
+                    text: "Etap 4: "
+                    Layout.fillWidth: true
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredHeight: 75
+                    Layout.rowSpan: 2
+                }
+
+            }
+
+            Rectangle {
+                height: parent.height
+                width: 1
+                color: "darkgrey"
+                Layout.maximumWidth: 1
+                Layout.minimumWidth: 1
+                Layout.preferredWidth: 1
+                Layout.fillWidth: false
+                Layout.fillHeight: true
+            }
+
+            ColumnLayout {
+                id: columnLayout
                 width: viewWidth
-                height: rowHeight + 5
-                rowHeight: rowHeight
-            }
-            GanttChartRow {
-                id: row2
-                height: rowHeight + 5
-                rowHeight: rowHeight
-            }
-            GanttChartRow {
-                id: row3
-                height: rowHeight + 5
-                rowHeight: rowHeight
-            }
-            GanttChartRow {
-                id: row4
-                height: rowHeight + 5
-                rowHeight: rowHeight
-            }
-            GanttChartRow {
-                id: row5
-                height: rowHeight + 5
-                rowHeight: rowHeight
-            }
-            GanttChartRow {
-                id: row6
-                height: rowHeight + 5
-                rowHeight: rowHeight
-            }
-            GanttChartRow {
-                id: row7
-                height: rowHeight + 5
-                rowHeight: rowHeight
-            }
-            GanttChartRow {
-                id: row8
-                height: rowHeight + 5
-                rowHeight: rowHeight
+                height: parent.height
+                spacing: 0
+
+                LegendChartRow {
+                    id: legendRow
+                    width: viewWidth
+                    height: rowHeight
+                    Layout.fillHeight: false
+                    rowHeight: rowHeight
+                }
+
+
+                Line {
+                    width: parent.width
+                    height: lineWidth + 2*lineSpacing
+                    lineWidth: lineWidth
+                    lineSpacing: lineSpacing
+                }
+
+                GanttChartRow {
+                    id: row1
+                    width: viewWidth
+                    height: rowHeight
+                    Layout.fillHeight: false
+                    rowHeight: rowHeight
+                }
+                Rectangle {
+                    height: rowSpacing
+                    width: parent.width
+                    color: "#00000000"
+                }
+                GanttChartRow {
+                    id: row2
+                    height: rowHeight
+                    rowHeight: rowHeight
+                }
+
+                Line {
+                    width: parent.width
+                    height: lineWidth + 2*lineSpacing
+                    lineWidth: lineWidth
+                    lineSpacing: lineSpacing
+                }
+
+                GanttChartRow {
+                    id: row3
+                    height: rowHeight
+                    rowHeight: rowHeight
+                }
+                Rectangle {
+                    height: rowSpacing
+                    width: parent.width
+                    color: "#00000000"
+                }
+                GanttChartRow {
+                    id: row4
+                    height: rowHeight
+                    rowHeight: rowHeight
+                }
+
+                Line {
+                    width: parent.width
+                    height: lineWidth + 2*lineSpacing
+                    lineWidth: lineWidth
+                    lineSpacing: lineSpacing
+                }
+
+                GanttChartRow {
+                    id: row5
+                    height: rowHeight
+                    rowHeight: rowHeight
+                }
+                Rectangle {
+                    height: rowSpacing
+                    width: parent.width
+                    color: "#00000000"
+                }
+                GanttChartRow {
+                    id: row6
+                    height: rowHeight
+                    rowHeight: rowHeight
+                }
+
+                Line {
+                    width: parent.width
+                    height: lineWidth + 2*lineSpacing
+                    lineWidth: lineWidth
+                    lineSpacing: lineSpacing
+                }
+
+                GanttChartRow {
+                    id: row7
+                    height: rowHeight
+                    rowHeight: rowHeight
+                }
+                Rectangle {
+                    height: rowSpacing
+                    width: parent.width
+                    color: "#00000000"
+                }
+                GanttChartRow {
+                    id: row8
+                    height: rowHeight
+                    rowHeight: rowHeight
+                }
             }
         }
     }
@@ -71,11 +211,10 @@ Item {
         target: uiHandler
         onStartGanttDrawing: {
             var unit = Math.max(window.width / cMax, 8);
-            console.log("Unit: ", unit);
 
             viewWidth = cMax*unit;
-            console.log("Width: ", viewWidth);
-            console.log("Real width:", scrollView.width)
+            columnLayout.width = viewWidth;
+            rowLayout.width = viewWidth;
 
             row1.unit = unit;
             row2.unit = unit;
@@ -85,6 +224,8 @@ Item {
             row6.unit = unit;
             row7.unit = unit;
             row8.unit = unit;
+
+            getLegendProperties(cMax, unit);
         }
 
         onDrawGanttRow: {
@@ -119,5 +260,22 @@ Item {
 
     }
 
+    function getLegendProperties(cMax, unit) {
+        var elementCount = Math.ceil(cMax / legendSpacing);
+        var elementIndexes = ["0"];
 
+        for (var i = 1; i <= elementCount; i++) {
+            var indexNb = i*legendSpacing;
+            elementIndexes.push(indexNb.toString());
+        }
+
+        legendRow.unit = unit;
+        legendRow.lineWidth = 1;
+        legendRow.lineGap = legendSpacing;
+        legendRow.drawRow(elementCount+1, elementIndexes);
+
+        console.log(elementIndexes);
+    }
 }
+
+

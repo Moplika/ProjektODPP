@@ -3,6 +3,7 @@ import QtQuick.Controls 1.0
 
 
 Item {
+    id: item1
     property var colors: [
         "#3A5869",
         "#45B29D",
@@ -25,6 +26,7 @@ Item {
     Row {
         x: 0
         y: 0
+        anchors.verticalCenter: parent.verticalCenter
 
         Repeater {
             id: rowRepeater
@@ -40,7 +42,6 @@ Item {
                     width: elementWidths[index]*unit
                     height: rowHeight
                     color: colors[(machineId + index) % colors.length]
-//                    color: colors[Math.floor(Math.random() * colors.length)]
                     border.color: "black"
                     border.width: 1
                     Text {

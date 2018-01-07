@@ -45,7 +45,10 @@ HEADERS += \
 
 DISTFILES += \
     GanttChartRow.qml \
-    resources/logo.png
+    resources/logo.png \
+    Line.qml \
+    Line.qml \
+    Line.qml
 
 
 OTHER_FILES +=

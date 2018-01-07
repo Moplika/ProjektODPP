@@ -19,5 +19,7 @@
         <file>FilePickerDialog.qml</file>
         <file>Start.qml</file>
         <file>resources/logo.png</file>
+        <file>Line.qml</file>
+        <file>LegendChartRow.qml</file>
     </qresource>
 </RCC>
