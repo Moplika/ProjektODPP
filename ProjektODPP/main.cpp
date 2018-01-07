@@ -75,18 +75,24 @@ void testDataReading() {
     std::vector <unsigned int> Permutacje = { 0,1,9,13,0,5,21,17,0,14,6,10,0,2,22,18,0,7,23,3,0,11,15,19,0,12,8,20,16,0,4,24,0 };
     DataReader Dane;
     std::cout << "Udalo sie utworzyc obiekt" << std::endl;
-    Dane.Odczyt_Pliku("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv");
+
+    Dane.Nowy_Plik("C:\\Users\\akuku\\source\\repos\\aplikacja\\aplikacja\\formaty2.csv");
+    std::cout << "Nowy plik stworzono" << std::endl;
+    Dane.Odczyt_Pliku("C:\\Users\\akuku\\source\\repos\\aplikacja\\aplikacja\\formaty1.csv");
     std::cout << "Odczytano plik" << std::endl;
-    Dane.Dodaj_Rekord("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv",121312,"Bolek i Lolek",12,113,15,16);
+    Dane.Dodaj_Rekord("C:\\Users\\akuku\\source\\repos\\aplikacja\\aplikacja\\formaty1.csv",121312,"Bolek i Lolek",12,113,15,16);
     std::cout << "Dodal jakis rekord" << std::endl;
-    Dane.Stworz_Wektor_In("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\formaty1.csv");
-    auto v1 = Dane.getInputFileContents();
+    Dane.Dodaj_Rekord("C:\\Users\\akuku\\source\\repos\\aplikacja\\aplikacja\\formaty1.csv", 666666, "Franca", 19, 22, 23, 888);
+    std::cout << "Dodal jakis rekord" << std::endl;
+    Dane.Stworz_Wektor_In("C:\\Users\\akuku\\source\\repos\\aplikacja\\aplikacja\\formaty1.csv");
     std::cout << "Strorzono wektor" << std::endl;
-    Dane.Stworz_Wektor_Out("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv");
-    auto v2 = Dane.getOutputFileContents();
-    std::cout << "Strorzono wektor" <<std:: endl;
-    Dane.Wyniki("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\wyniki.csv", Poczatki, Konce, Permutacje);
+    Dane.Stworz_Wektor_Out(Poczatki, Konce, Permutacje);
     std::cout << "No i koniec" << std::endl;
+    //Dane.Stworz_Wektor_Out("C:\\Users\\akuku\\source\\repos\\aplikacja\\aplikacja\\wyniki.csv");
+    //cout << "Strorzono wektor" << endl;
+    Dane.Wyniki("C:\\Users\\akuku\\source\\repos\\aplikacja\\aplikacja\\wyniki.csv", Poczatki, Konce, Permutacje);
+    std::cout << "No i koniec 2" << std::endl;
+    //Dane.Formatowanie("doalgorytmu.txt");
 }
 
 

@@ -97,10 +97,11 @@ void UIHandler::refreshAllTasksTable() {
 }
 
 void UIHandler::refreshScheduleTable() {
-    if (!dataReader.Stworz_Wektor_Out(filepathOut)) {
-        std::cout << "Nie moge stworzyc wektora!" << std::endl;
-        return;
-    };
+
+
+    dataReader.Stworz_Wektor_Out(flowProblem.getStartTimes(),
+                                      flowProblem.getFinishTimes(),
+                                      flowProblem.getCurrentPermutation());
 
     auto allRows = dataReader.getOutputFileContents();
 
