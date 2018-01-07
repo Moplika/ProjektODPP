@@ -80,19 +80,19 @@ void UIHandler::refreshAllTasksTable() {
     emit clearAllTasksTable();
 
     // temp
-    int id = 1;
+//    int id = 1;
 
     for (auto row : allRows) {
         QList<QString> rowValues;
 
-        rowValues.push_back(QString::number(id));
+//        rowValues.push_back(QString::number(id));
 
         for (auto string : row) {
             rowValues.push_back(QString::fromStdString(string));
         }
 
         emit addAllTasksRow(rowValues);
-        id++;
+//        id++;
     }
 }
 
@@ -108,19 +108,19 @@ void UIHandler::refreshScheduleTable() {
     emit clearScheduleTable();
 
     // temp
-    int id = 1;
+//    int id = 1;
 
     for (auto row : allRows) {
         QList<QString> rowValues;
 
-        rowValues.push_back(QString::number(id));
+//        rowValues.push_back(QString::number(id));
 
         for (auto string : row) {
             rowValues.push_back(QString::fromStdString(string));
         }
 
         emit addScheduleRow(rowValues);
-        id++;
+//        id++;
     }
 }
 
