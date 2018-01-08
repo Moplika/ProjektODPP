@@ -36,6 +36,15 @@ void FlowProblem::setData(std::vector<double> times,
     taskTimes = times;
 
 //    tabuListMaxLength = 20;
+    if (taskTimes.front() != 0) {
+        taskTimes.insert(taskTimes.begin(), 0);
+    }
+
+//    for (auto it = taskTimes.begin(); it != taskTimes.end(); it++) {
+//        std::cout << *it << " ";
+//    }
+//    std::cout << std::endl;
+
 
     if (currentPermutation.back() != 0) {
         currentPermutation.push_back(0);
