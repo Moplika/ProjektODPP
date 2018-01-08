@@ -2,6 +2,8 @@ import QtQuick 2.4
 
 ScheduleForm {
 
+    btn_refresh.enabled: false;
+
     function addRow(rowValues) {
         var params = {
             recordId: rowValues[0],
@@ -26,6 +28,16 @@ ScheduleForm {
         }
         onClearScheduleTable: {
             scheduleModel.clear();
+        }
+
+        onInputFileOpened: {
+            btn_refresh.enabled = false;
+            scheduleModel.clear();
+        }
+
+        onCalculationFinished: {
+            btn_refresh.enabled = true;
+            uiHandler.refreshScheduleTable();
         }
 
     }

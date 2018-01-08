@@ -5,9 +5,11 @@
 #include <cstdlib>
 #include <algorithm>
 #include <fstream>
+#include <sstream>
 #include <list>
 #include <string>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
@@ -40,7 +42,7 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
     string temp;
     getline(plik, temp);
     int number_of_lines = 0;
-    cout << temp << endl;
+//    cout << temp << endl;
     int i = 0;
     char temp1;
     int Nowe_Zadanie;
@@ -65,7 +67,7 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
 
             for (int j = 0; j < iloscStanowisk; j++) {
                 plik >> czas;
-                cout << "Czas" << endl;
+//                cout << "Czas" << endl;
                 Czasy.push_back(czas);
                 auto s3 = to_string(czas);
                 linia.push_back(s3);
@@ -253,6 +255,8 @@ void DataReader::Stworz_Wektor_Out(vector <double>  Start, vector <double> Konie
     string Klient_temp;
     unsigned int Ekipa = 0;
     double Czas, C1, C2;
+    int precision = 0;
+
     for (vector <unsigned int> ::iterator it = Permutacje.begin(); it != Permutacje.end(); it++) {
 
         if (*it != 0) {
@@ -281,9 +285,9 @@ void DataReader::Stworz_Wektor_Out(vector <double>  Start, vector <double> Konie
             auto s1 = to_string(Numer);
             auto s2 = to_string(Etap);
             auto s3 = to_string(Ekipa);
-            auto s4 = to_string(Czas);
-            auto s5 = to_string(C1);
-            auto s6 = to_string(C2);
+            auto s4 = toString(Czas, precision);
+            auto s5 = toString(C1, precision);
+            auto s6 = toString(C2, precision);
             linia.push_back(s0);
             linia.push_back(s1);
             linia.push_back(Klient_temp);
@@ -330,4 +334,10 @@ unsigned int DataReader::getTaskCount() {
 
 vector<double> DataReader::getTaskTimes() {
     return Czasy;
+}
+
+std::string DataReader::toString(const double value, const int n) {
+    std::ostringstream out;
+    out << std::setprecision(n) << fixed << value;
+    return out.str();
 }

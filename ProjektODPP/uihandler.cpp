@@ -20,13 +20,23 @@ void UIHandler::startCalculations() {
 }
 
 void UIHandler::calculateSchedule() {
-    //TODO: Wczytanie danych i wykonanie faktycznych obliczeń
-//    flowProblem = readFlowProblem("C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex25_4.txt");
-
-    dataReader.Odczyt_Pliku(filepathIn);
+//    dataReader.Odczyt_Pliku(filepathIn);
 
     unsigned int taskCount = dataReader.getTaskCount();
+
+    if (taskCount == 0) {
+        emit calculationFinished();
+        return;
+    }
+
     auto taskTimes = dataReader.getTaskTimes();
+
+    std::cout << "Task Count: " << taskCount << std::endl;
+
+    for (auto time : taskTimes) {
+        std::cout << time << " ";
+    }
+    std::cout << std::endl;
 
     flowProblem = FlowProblem(taskCount, 4, 2, taskTimes);
 
@@ -43,10 +53,21 @@ void UIHandler::calculateSchedule() {
     flowProblem.printCurrentPermutation();
     std::cout << "Najlepsze otrzymane cMax: " << bestCMax << std::endl;
 
-    emit calculationFinished();
-    wasCalculated = true;
     this->refreshGanttChart();
 
+    emit calculationFinished();
+    wasCalculated = true;
+
+    // Debug
+//    auto permutation = flowProblem.getCurrentPermutation();
+//    auto startTimes = flowProblem.getStartTimes();
+//    auto finishTimes = flowProblem.getFinishTimes();
+//    auto times = flowProblem.getTaskTimes();
+
+//    for (auto element : permutation) {
+//        std::cout << element << ": " << times.at(element) << " " << startTimes.at(element) << " "
+//                  << finishTimes.at(element) << std::endl;
+//    }
 
 }
 
@@ -71,28 +92,22 @@ bool UIHandler::addNewClient(int clientNumber, QString clientName, double stage1
 }
 
 void UIHandler::refreshAllTasksTable() {
-    if (!dataReader.Stworz_Wektor_In(filepathIn)) {
-        std::cout << "Nie moge stworzyc wektora!" << std::endl;
-        return;
-    };
+//    if (!dataReader.Stworz_Wektor_In(filepathIn)) {
+//        std::cout << "Nie moge stworzyc wektora!" << std::endl;
+//        return;
+//    };
     auto allRows = dataReader.getInputFileContents();
 
     emit clearAllTasksTable();
 
-    // temp
-//    int id = 1;
-
     for (auto row : allRows) {
         QList<QString> rowValues;
-
-//        rowValues.push_back(QString::number(id));
 
         for (auto string : row) {
             rowValues.push_back(QString::fromStdString(string));
         }
 
         emit addAllTasksRow(rowValues);
-//        id++;
     }
 }
 
@@ -107,20 +122,14 @@ void UIHandler::refreshScheduleTable() {
 
     emit clearScheduleTable();
 
-    // temp
-//    int id = 1;
-
     for (auto row : allRows) {
         QList<QString> rowValues;
-
-//        rowValues.push_back(QString::number(id));
 
         for (auto string : row) {
             rowValues.push_back(QString::fromStdString(string));
         }
 
         emit addScheduleRow(rowValues);
-//        id++;
     }
 }
 
@@ -157,8 +166,6 @@ void UIHandler::refreshGanttChart() {
             indexes.clear();
             gaps.clear();
             lengths.clear();
-
-            //            break; //TEMP
         } else {
             // Dalej na maszynie, dodaj elementy do wektorow
             double taskTime = taskTimes.at(index);
@@ -171,12 +178,7 @@ void UIHandler::refreshGanttChart() {
             lengths.push_back(taskTime);
             gaps.push_back(gap);
         }
-
-
-
-
     }
-
 }
 
 void UIHandler::createAllTasksRow() {
@@ -217,14 +219,15 @@ void UIHandler::createNewInputFile(QUrl filePath) {
     filepathIn = filePath.toLocalFile().toStdString();
     std::cout << "Sciezka: " << filepathIn << std::endl;
 
-    // TODO: Zastąpić funkcją od Artura
-//    isInputLoaded = dataReader.Odczyt_Pliku(filepathIn);
+    dataReader.Nowy_Plik(filepathIn);
+    isInputLoaded = true;
 
     if (isInputLoaded) {
         emit inputFileOpened();
     } else {
         emit inputFileNotOpened();
     }
+    emit newFileCreated();
     wasCalculated = false;
 }
 
@@ -246,8 +249,6 @@ void UIHandler::saveToFile(QUrl filePath) {
     filepathOut = filePath.toLocalFile().toStdString();
     std::cout << "Sciezka: " << filepathOut << std::endl;
 
-//    isOutputLoaded = true;
-
     isOutputLoaded = dataReader.Wyniki(filepathOut,
                                        flowProblem.getStartTimes(),
                                        flowProblem.getFinishTimes(),
@@ -260,7 +261,6 @@ bool UIHandler::isInputFileLoaded() {
 
 bool UIHandler::isOutputFileLoaded() {
     return isOutputLoaded;
-
 }
 
 bool UIHandler::wasScheduleCalculated() {

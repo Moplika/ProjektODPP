@@ -64,4 +64,8 @@ Item {
         elementWidths = lengths;
     }
 
+    function clear() {
+        rowRepeater.model = 0;
+    }
+
 }

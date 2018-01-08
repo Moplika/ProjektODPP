@@ -28,11 +28,10 @@ signals:
 
     void inputFileOpened();
     void inputFileNotOpened();
+    void newFileCreated();
 
     void outputSaved();
     void outputNotSaved();
-
-
 
 public slots:
     void startCalculations();

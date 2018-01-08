@@ -35,6 +35,8 @@ private:
     std::vector < std::vector <std::string> > Linie_In;
     std::vector < std::vector <std::string> > Linie_Out;
 
+    std::string toString(const double value, const int n = 6);
+
 };
 
 #endif // DATAREADER_H

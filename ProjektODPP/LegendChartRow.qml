@@ -72,4 +72,9 @@ Item {
         indexes = elementIndexes;
     }
 
+    function clear() {
+        rowRepeater.model = 0;
+    }
+
+
 }

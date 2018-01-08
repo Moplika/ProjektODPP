@@ -258,6 +258,17 @@ Item {
             }
         }
 
+        onInputFileOpened: {
+            row1.clear();
+            row2.clear();
+            row3.clear();
+            row4.clear();
+            row5.clear();
+            row6.clear();
+            row7.clear();
+            row8.clear();
+            legendRow.clear();
+        }
     }
 
     function getLegendProperties(cMax, unit) {
@@ -274,7 +285,7 @@ Item {
         legendRow.lineGap = legendSpacing;
         legendRow.drawRow(elementCount+1, elementIndexes);
 
-        console.log(elementIndexes);
+//        console.log(elementIndexes);
     }
 }
 

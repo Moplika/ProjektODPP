@@ -2,7 +2,7 @@ import QtQuick 2.4
 
 MainPageForm {
     tabView.onCurrentIndexChanged: {
-        console.log(tabView.currentIndex);
+//        console.log(tabView.currentIndex);
 
         // Tab: Wszystkie zadania
         if (tabView.currentIndex == 2) {
@@ -20,7 +20,7 @@ MainPageForm {
 
         // Tab: Harmonogram
         if (tabView.currentIndex == 4) {
-            if (uiHandler.isOutputFileLoaded()) {
+            if (uiHandler.wasScheduleCalculated()) {
                 uiHandler.refreshScheduleTable();
             }
         }
