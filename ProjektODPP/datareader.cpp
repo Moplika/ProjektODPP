@@ -42,7 +42,7 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
     string temp;
     getline(plik, temp);
     int number_of_lines = 0;
-//    cout << temp << endl;
+    //    cout << temp << endl;
     int i = 0;
     char temp1;
     int Nowe_Zadanie;
@@ -67,7 +67,7 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
 
             for (int j = 0; j < iloscStanowisk; j++) {
                 plik >> czas;
-//                cout << "Czas" << endl;
+                //                cout << "Czas" << endl;
                 Czasy.push_back(czas);
                 auto s3 = to_string(czas);
                 linia.push_back(s3);
@@ -96,7 +96,7 @@ bool DataReader::Dodaj_Rekord(string nazwa_pliku, int NumerKlienta, string Nazwa
     plik_zap.open(nazwa_pliku.c_str(), ios::app);
     if (!plik_zap.is_open()) {
         cerr << "Brak pliku \n" << endl;
-    return false;
+        return false;
     }
     int Nowe_Zadanie = iloscZadan + 1;
     plik_zap << Nowe_Zadanie;
@@ -115,6 +115,13 @@ bool DataReader::Dodaj_Rekord(string nazwa_pliku, int NumerKlienta, string Nazwa
     plik_zap << endl;
     iloscZadan++;
     plik_zap.close();
+
+    Czasy.push_back(Czas1);
+    Czasy.push_back(Czas2);
+    Czasy.push_back(Czas3);
+    Czasy.push_back(Czas4);
+    Klient.push_back(NazwaKlienta);
+    Numer_Klienta.push_back(NumerKlienta);
 
     vector <string> linia;
     auto s1 = to_string(Nowe_Zadanie);
@@ -155,7 +162,7 @@ bool DataReader::Formatowanie(string nazwa_pliku, vector <unsigned int> Permutac
     plik_zap << endl;
 
     for (int i = 0; i < Permutacje.size(); i++) {
-         plik_zap << Permutacje.at(i) << " ";
+        plik_zap << Permutacje.at(i) << " ";
     }
 
     plik_zap << endl;
@@ -191,8 +198,8 @@ bool DataReader::Wyniki(string nazwa_pliku, std::vector<double> Start, std::vect
             plik_zap << Numer_Klienta.at(Zadanie-1) << ";" << Klient.at(Zadanie-1) << ";";
             plik_zap << Etap << ";" << Wykonujaca_Ekipa << ';';
             plik_zap << Czasy.at(Operacja - 1);
-            plik_zap << ";" << Start.at(Operacja-1);
-            plik_zap << ";"<< Koniec.at(Operacja-1) << endl;
+            plik_zap << ";" << Start.at(Operacja);
+            plik_zap << ";"<< Koniec.at(Operacja) << endl;
 
         }
         else {
@@ -277,8 +284,8 @@ void DataReader::Stworz_Wektor_Out(vector <double>  Start, vector <double> Konie
             Klient_temp = Klient.at(Zadanie - 1);
             Ekipa = Wykonujaca_Ekipa;
             Czas = Czasy.at(Operacja - 1);
-            C1 = Start.at(Operacja - 1);
-            C2 = Koniec.at(Operacja - 1);
+            C1 = Start.at(Operacja);
+            C2 = Koniec.at(Operacja);
 
             vector <string> linia;
             auto s0 = to_string(Operacja);
