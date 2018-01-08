@@ -9,7 +9,7 @@ ApplicationWindow {
     visible: true
     width: 800
     height: 600
-    title: qsTr("Hello World")
+    title: qsTr("Wyznaczanie harmonogramu")
 
     menuBar: MenuBar {
         Menu {

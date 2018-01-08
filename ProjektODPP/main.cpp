@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     //Kod pokazujący interfejs, nie usuwać
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
-
+    QGuiApplication::setApplicationDisplayName("Wyznaczanie harmonogramu");
     QQmlApplicationEngine engine;
     engine.load(QUrl(QLatin1String("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
