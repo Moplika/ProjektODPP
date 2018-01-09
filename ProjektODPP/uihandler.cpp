@@ -25,7 +25,7 @@ void UIHandler::calculateSchedule() {
     unsigned int taskCount = dataReader.getTaskCount();
 
     if (taskCount == 0) {
-        emit calculationFinished();
+        emit calculationFinished(0);
         return;
     }
 
@@ -55,7 +55,7 @@ void UIHandler::calculateSchedule() {
 
     this->refreshGanttChart();
 
-    emit calculationFinished();
+    emit calculationFinished(flowProblem.getCMax());
     wasCalculated = true;
 
     // Debug

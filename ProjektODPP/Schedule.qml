@@ -4,6 +4,35 @@ ScheduleForm {
 
     btn_refresh.enabled: false;
 
+    label_cmax.text: " "
+
+    btn_refresh.onClicked: uiHandler.refreshScheduleTable();
+
+    Connections {
+        target: uiHandler;
+        onAddScheduleRow: {
+            addRow(rowValues);
+        }
+        onClearScheduleTable: {
+//            label_cmax.text = " "
+            scheduleModel.clear();
+        }
+
+        onInputFileOpened: {
+            btn_refresh.enabled = false;
+            scheduleModel.clear();
+            label_cmax.text = " "
+
+        }
+
+        onCalculationFinished: {
+            btn_refresh.enabled = true;
+            uiHandler.refreshScheduleTable();
+            label_cmax.text = cMax.toString();
+        }
+
+    }
+
     function addRow(rowValues) {
         var params = {
             recordId: rowValues[0],
@@ -17,28 +46,5 @@ ScheduleForm {
         }
 
         scheduleModel.append(params);
-    }
-
-    btn_refresh.onClicked: uiHandler.refreshScheduleTable();
-
-    Connections {
-        target: uiHandler;
-        onAddScheduleRow: {
-            addRow(rowValues);
-        }
-        onClearScheduleTable: {
-            scheduleModel.clear();
-        }
-
-        onInputFileOpened: {
-            btn_refresh.enabled = false;
-            scheduleModel.clear();
-        }
-
-        onCalculationFinished: {
-            btn_refresh.enabled = true;
-            uiHandler.refreshScheduleTable();
-        }
-
     }
 }

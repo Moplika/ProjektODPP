@@ -6,6 +6,7 @@ Item {
     id: window
     width: 800
     height: 560
+    property alias label_cmax: label_cmax
     property alias btn_refresh: btn_refresh
     property alias tableView_schedule: tableView_schedule
     property alias scheduleModel: scheduleModel
@@ -42,6 +43,28 @@ Item {
         anchors.topMargin: 5
         anchors.right: parent.right
         anchors.rightMargin: 5
+    }
+
+    Label {
+        id: label
+        x: 10
+        y: 5
+        width: 80
+        height: 30
+        text: qsTr("Całkowity czas: ")
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignRight
+    }
+
+    Label {
+        id: label_cmax
+        x: 95
+        y: 5
+        width: 47
+        height: 30
+        text: qsTr("123456")
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignLeft
     }
 
     TableView {
@@ -103,6 +126,8 @@ Item {
 
         model: scheduleModel
     }
+
+
 
 
 

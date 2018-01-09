@@ -14,7 +14,7 @@ public:
     explicit UIHandler(QObject *parent = nullptr);
 
 signals:
-    void calculationFinished();
+    void calculationFinished(double cMax);
 
     void addAllTasksRow(QList<QString> rowValues);
     void clearAllTasksTable();
