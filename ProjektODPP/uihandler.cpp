@@ -47,7 +47,7 @@ void UIHandler::calculateSchedule() {
     flowProblem.printCriticalPath();
 
     std::vector<unsigned int> bestPermutation;
-    double bestCMax = flowProblem.doTabuSearch(2000, 8, bestPermutation);
+    double bestCMax = flowProblem.doTabuSearch(10000, 20, bestPermutation);
     flowProblem.setPermutation(bestPermutation);
 
     flowProblem.printCurrentPermutation();
