@@ -131,6 +131,8 @@ void UIHandler::refreshScheduleTable() {
 
         emit addScheduleRow(rowValues);
     }
+
+    emit updateCMax(flowProblem.getCMax());
 }
 
 void UIHandler::refreshGanttChart() {

@@ -33,6 +33,8 @@ signals:
     void outputSaved();
     void outputNotSaved();
 
+    void updateCMax(double cMax);
+
 public slots:
     void startCalculations();
 

@@ -1,11 +1,10 @@
 import QtQuick 2.4
 
 ScheduleForm {
+    id: scheduleForm
 
     btn_refresh.enabled: false;
-
     label_cmax.text: " "
-
     btn_refresh.onClicked: uiHandler.refreshScheduleTable();
 
     Connections {
@@ -14,24 +13,26 @@ ScheduleForm {
             addRow(rowValues);
         }
         onClearScheduleTable: {
-//            label_cmax.text = " "
             scheduleModel.clear();
         }
 
         onInputFileOpened: {
             btn_refresh.enabled = false;
             scheduleModel.clear();
-            label_cmax.text = " "
-
+            label_cmax.text = " ";
         }
 
         onCalculationFinished: {
-            btn_refresh.enabled = true;
             uiHandler.refreshScheduleTable();
-            label_cmax.text = cMax.toString();
         }
 
+        onUpdateCMax: {
+            label_cmax.text = cMax.toString();
+            btn_refresh.enabled = true;
+        }
     }
+
+
 
     function addRow(rowValues) {
         var params = {
