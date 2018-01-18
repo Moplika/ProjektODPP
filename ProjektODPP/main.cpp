@@ -27,8 +27,6 @@ int main(int argc, char *argv[])
     UIHandler uiHandler;
     engine.rootContext()->setContextProperty(QString("uiHandler"), &uiHandler);
 
-//    testDataReading();
-
     return app.exec();
 
 
@@ -62,9 +60,6 @@ int main(int argc, char *argv[])
 //        tabuListTest();
 //    tabuListTest(10000, 20, "C:\\Users\\Monia\\Desktop\\FlexFlowShop\\ex20_5.txt");
 //          stationBoundriesTest();
-
-
-
     return 0;
 }
 

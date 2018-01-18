@@ -284,8 +284,6 @@ Item {
         legendRow.lineWidth = 1;
         legendRow.lineGap = legendSpacing;
         legendRow.drawRow(elementCount+1, elementIndexes);
-
-//        console.log(elementIndexes);
     }
 }
 

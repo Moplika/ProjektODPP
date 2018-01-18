@@ -35,16 +35,9 @@ void FlowProblem::setData(std::vector<double> times,
     currentPermutation = firstPermutation;
     taskTimes = times;
 
-//    tabuListMaxLength = 20;
     if (taskTimes.front() != 0) {
         taskTimes.insert(taskTimes.begin(), 0);
     }
-
-//    for (auto it = taskTimes.begin(); it != taskTimes.end(); it++) {
-//        std::cout << *it << " ";
-//    }
-//    std::cout << std::endl;
-
 
     if (currentPermutation.back() != 0) {
         currentPermutation.push_back(0);
@@ -290,7 +283,6 @@ void FlowProblem::findBestPermutation() {
 
     auto originalPermutation = currentPermutation;
 
-//    double bestCMax = this->getCMax();
     double bestCMax = INT_MAX;
     unsigned int movedElementPosition = 0;
     unsigned int bestElementPosition = 0;
@@ -553,8 +545,6 @@ void FlowProblem::addTabuListElement(TabuListElement element) {
 }
 
 bool FlowProblem::doesFulfillRequirements(unsigned int elementPosition, unsigned int newPosition) {   
-//    return true;
-
     unsigned int elementToMove = currentPermutation.at(elementPosition);
     unsigned int elementOnNewPosition = currentPermutation.at(newPosition);
 
@@ -692,7 +682,6 @@ void FlowProblem::printMachineBoundries() {
 }
 
 void FlowProblem::printCurrentPermutation() {
-    //    std::cout << "Aktualna permutacja: " << std::endl;
     for (auto element : currentPermutation) {
         std::cout << element << " ";
     }

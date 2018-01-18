@@ -4,7 +4,6 @@ import QtQuick.Controls 1.0
 
 Item {
     id: item1
-//    property var indexes: ["31","6","1","96","76","26","56","71","59"]
     property var indexes: []
     property int lineWidth: 1
     property int lineGap: 50
@@ -31,7 +30,6 @@ Item {
                     width: lineWidth
                     height: rowHeight
                     color: "black"
-//                    color: colors[Math.floor(Math.random() * colors.length)]
                     border.color: "black"
                     border.width: 1
 

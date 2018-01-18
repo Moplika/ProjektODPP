@@ -42,7 +42,7 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
     string temp;
     getline(plik, temp);
     int number_of_lines = 0;
-    //    cout << temp << endl;
+
     int i = 0;
     char temp1;
     int Nowe_Zadanie;
@@ -67,7 +67,6 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
 
             for (int j = 0; j < iloscStanowisk; j++) {
                 plik >> czas;
-                //                cout << "Czas" << endl;
                 Czasy.push_back(czas);
                 auto s3 = to_string(czas);
                 linia.push_back(s3);
@@ -85,9 +84,6 @@ bool DataReader::Odczyt_Pliku(string nazwa_pliku) {
     plik.clear();
     plik.close();
     return true;
-    //
-    //FlowProblem flowProblem(lZadan, lStanowisk, LMaszyn, czasy);
-    //return flowProblem;
 }
 
 bool DataReader::Dodaj_Rekord(string nazwa_pliku, int NumerKlienta, string NazwaKlienta, int Czas1, int Czas2, int Czas3, int Czas4) {
@@ -231,7 +227,6 @@ bool DataReader::Stworz_Wektor_In(string nazwa_pliku) {
     while (getline(plik, temp1, ';')) {
         if (!plik.eof()) {
             string temp2, Numer, Klient, C1, C2, C3, C4;
-            //getline(plik, temp1, ';');
             getline(plik, Numer, ';');
             getline(plik, Klient, ';');
             getline(plik, C1, ';');

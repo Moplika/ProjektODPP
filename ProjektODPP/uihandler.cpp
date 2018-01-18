@@ -16,12 +16,9 @@ UIHandler::UIHandler(QObject *parent) : QObject(parent)
 
 void UIHandler::startCalculations() {
     QFuture<void> t1 = QtConcurrent::run(this, calculateSchedule);
-    //    t1.waitForFinished();
 }
 
 void UIHandler::calculateSchedule() {
-//    dataReader.Odczyt_Pliku(filepathIn);
-
     unsigned int taskCount = dataReader.getTaskCount();
 
     if (taskCount == 0) {
@@ -184,8 +181,6 @@ void UIHandler::refreshGanttChart() {
 }
 
 void UIHandler::createAllTasksRow() {
-    // TODO: Dodać czytanie faktycznych wartości z pliku
-
     QList<QString> rowValues;
 
     rowValues.push_back("7");
@@ -201,7 +196,6 @@ void UIHandler::createAllTasksRow() {
 }
 
 void UIHandler::createScheduleRow() {
-    // TODO: Dodać czytanie faktycznych wartości z pliku
     QList<QString> rowValues;
 
     rowValues.push_back("7");

@@ -13,9 +13,6 @@ Item {
         "#41BF71",
         "#44BEC9"
     ]
-//    property var elementWidths: [1, 2, 3, 4, 5, 6, 7, 8, 9]
-//    property var gapTimes: [9,8,7,6,5,4,3,2,1]
-//    property var indexes: ["31","6","1","96","76","26","56","71","59"]
     property var elementWidths: []
     property var gapTimes: []
     property var indexes: []

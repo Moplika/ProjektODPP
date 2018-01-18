@@ -71,8 +71,6 @@ private:
 
     unsigned int tabuListMaxLength;
 
-    //    Permutation currentPermutation;
-
     void findTechnologicalPredecessors();
     void calculateTotalTimes();
     void findCriticalPath();

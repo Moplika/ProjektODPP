@@ -24,7 +24,6 @@ void mojPrzykladTest() {
     std::vector<double> totalTimes = flowProblem.getFinishTimes();
     int i = 0;
     std::cout << "Calkowite czasy dzialania: " << std::endl;
-    // TODO: Zobaczyć, jak działa std::for_each
     for (std::vector<double>::iterator it = totalTimes.begin();
          it != totalTimes.end(); it++, i++) {
         std::cout << i <<": " << *it << "   ";

@@ -2,8 +2,6 @@ import QtQuick 2.4
 
 MainPageForm {
     tabView.onCurrentIndexChanged: {
-//        console.log(tabView.currentIndex);
-
         // Tab: Wszystkie zadania
         if (tabView.currentIndex == 2) {
             if (uiHandler.isInputFileLoaded()) {
